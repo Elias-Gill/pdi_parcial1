@@ -1,0 +1,22 @@
+[project]
+name = "image_enhancer"
+version = "0.1.0"
+description = "Manipulador y mejorador de imagenes PDI 2025"
+authors = [
+    {name = "Elias Gill",email = "eliasgill42@gmail.com"},
+    {name = "Abigail Nuñes"},
+    {name = "Maria Jose Mendoza"},
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "opencv-python (>=4.11.0.86,<5.0.0.0)"
+]
+
+[tool.poetry]
+package-mode = false
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
