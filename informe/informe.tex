@@ -10,6 +10,12 @@
 \usepackage{float}
 \usepackage{subcaption}
 
+% Tablas
+\usepackage{array}    % Para ajustar columnas
+\setlength{\intextsep}{1.5em}      % Elimina espacio arriba/abajo de floats
+\setlength{\textfloatsep}{1.5em}   % Elimina espacio entre floats y texto
+\captionsetup[table]{skip=2pt}   % Espacio mínimo entre tabla y caption
+
 % removes footnote with conference information in first column
 \renewcommand\footnotetextcopyrightpermission[1]{}
 \pagestyle{plain} % removes running headers
@@ -62,18 +68,58 @@ Falta completar \rojo{Completar}
 
 \section{Introducción}
 \subsection{Contexto y Motivación}
-- Breve descripción de la importancia de la mejora de contraste en imágenes.
-- Relevancia de las técnicas de procesamiento de imágenes en diversas aplicaciones (medicina, industria, etc.).
+
+El procesamiento digital de imágenes juega un papel crucial en diversos campos tecnológicos, donde la mejora de contraste permite:
+
+\begin{itemize}
+	\item Visualizar detalles críticos en imágenes médicas
+	\item Automatizar inspecciones industriales
+	\item Mejorar imágenes en condiciones de baja iluminación
+\end{itemize}
+
+Este trabajo evalúa métodos clásicos de mejora de contraste, proporcionando métricas
+comparativas para aplicaciones que requieren bajo costo computacional y resultados
+interpretables.
 
 \subsection{Objetivo}
-- Explicar el propósito del informe:
-comparar la efectividad de cuatro algoritmos de mejora de contraste.
+\label{subsec:objetivo}
+
+Este informe tiene como objetivo principal evaluar cuantitativamente el desempeño de cuatro algoritmos de mejora de contraste en imágenes en escala de grises:
+
+\begin{itemize}
+	\item \textbf{CLAHE} (Contrast Limited Adaptive Histogram Equalization)
+	\item \textbf{HE} (Histogram Equalization tradicional)
+	\item \textbf{DQHEPL} (Dualistic Quantum-inspired Histogram Equalization with Plateau Limit)
+	\item \textbf{BHEPL-D} (Brightness Preserving Histogram Equalization with Plateau Limit - Dynamic version)
+\end{itemize}
+
+La evaluación se realizará mediante métricas objetivas que consideran:
+
+\begin{itemize}
+	\item Preservación del brillo medio (AMBE)
+	\item Relación señal-ruido pico (PSNR)
+	\item Conservación de texturas (Entropía)
+	\item Nivel de realce visual (Contraste)
+	\item Distribución de intensidades (Uniformidad)
+\end{itemize}
+
+El análisis comparativo permitirá identificar:
+\begin{enumerate}
+	\item El algoritmo más efectivo para imágenes con bajo contraste inicial
+	\item Compromisos entre realce visual y preservación de brillo
+	\item Sensibilidad a diferentes distribuciones histogramáticas
+\end{enumerate}
+
+Los resultados proporcionarán criterios técnicos para seleccionar el método óptimo según
+aplicaciones específicas en procesamiento digital de imágenes.
 
 \subsection{Estructura del Informe}
+\rojo{continuar}
 - Resumen de las secciones del informe.
 
 \section{Metodología}
 \subsection{Descripción de los Algoritmos}
+\rojo{continuar}
 \subsubsection{CLAHE (Contrast Limited Adaptive Histogram Equalization)}
 - Explicación del algoritmo.
 - Detalles sobre los parámetros utilizados (clipLimit, tileGridSize).
@@ -91,21 +137,78 @@ comparar la efectividad de cuatro algoritmos de mejora de contraste.
 - Detalles sobre cómo mejora la técnica HE tradicional.
 
 \subsection{Preparación de las Imágenes}
+\rojo{continuar}
 - Detalles sobre el conjunto de datos utilizado.
 - Preprocesamiento de las imágenes (si aplica).
 
 \subsection{Métricas de Evaluación}
+
 \subsubsection{AMBE (Average Mean Brightness Error)}
-- Definición y utilidad de AMBE.
+La métrica AMBE mide la diferencia absoluta entre el brillo promedio de la imagen original y el de la imagen procesada. Su fórmula es:
+
+\begin{equation}
+\text{AMBE} = \left| \mu_X - \mu_Y \right|
+\end{equation}
+
+donde:
+\begin{itemize}
+    \item $\mu_X$: Brillo promedio de la imagen original.
+    \item $\mu_Y$: Brillo promedio de la imagen procesada.
+\end{itemize}
+
+Un valor de AMBE cercano a cero indica una buena preservación del brillo global de la imagen original.
 
 \subsubsection{PSNR (Peak Signal-to-Noise Ratio)}
-- Definición y cómo se utiliza para evaluar la calidad de las imágenes.
+El PSNR mide la calidad de reconstrucción entre dos imágenes. Se basa en el error cuadrático medio (MSE) entre la imagen original y la imagen procesada:
+
+\begin{equation}
+\text{MSE} = \frac{1}{MN} \sum_{i=1}^{M} \sum_{j=1}^{N} \left[ X(i,j) - Y(i,j) \right]^2
+\end{equation}
+
+\begin{equation}
+\text{PSNR} = 10 \cdot \log_{10} \left( \frac{L^2}{\text{MSE}} \right)
+\end{equation}
+
+donde:
+\begin{itemize}
+    \item $X(i,j)$: Intensidad del píxel en la posición $(i,j)$ de la imagen original.
+    \item $Y(i,j)$: Intensidad del píxel correspondiente en la imagen procesada.
+    \item $M, N$: Dimensiones de la imagen.
+    \item $L$: Valor máximo posible de intensidad (por ejemplo, 255 para imágenes de 8 bits).
+\end{itemize}
+
+Un PSNR mayor indica mejor calidad de la imagen procesada.
 
 \subsubsection{Entropía}
-- Explicación de la entropía como medida de la cantidad de información en una imagen.
+La entropía mide la cantidad de información o imprevisibilidad en la distribución de niveles de gris de una imagen:
+
+\begin{equation}
+\text{Entropía} = - \sum_{k=0}^{L-1} p_k \cdot \log_2(p_k)
+\end{equation}
+
+donde:
+\begin{itemize}
+    \item $p_k$: Probabilidad de ocurrencia del nivel de gris $k$.
+    \item $L$: Número total de niveles de gris (por ejemplo, 256).
+\end{itemize}
+
+Una mayor entropía implica una imagen más rica en detalles e información visual.
 
 \subsubsection{Contraste}
-- Definición de contraste en el contexto de las imágenes y su impacto visual.
+Una forma común de medir el contraste es utilizando la desviación estándar de las intensidades:
+
+\begin{equation}
+\text{Contraste} = \sigma = \sqrt{\frac{1}{MN} \sum_{i=1}^{M} \sum_{j=1}^{N} \left[ I(i,j) - \mu \right]^2}
+\end{equation}
+
+donde:
+\begin{itemize}
+    \item $I(i,j)$: Intensidad del píxel en la posición $(i,j)$.
+    \item $\mu$: Promedio de intensidades en la imagen.
+\end{itemize}
+
+El contraste también puede definirse mediante medidas basadas en diferencias entre píxeles vecinos o métricas estructurales más avanzadas, pero la desviación estándar es una de las más utilizadas por su simplicidad y efectividad.
+
 
 \section{Resultados}
 \subsection{Evaluación Visual}
@@ -126,6 +229,32 @@ Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia e
 reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat
 ullamco ut ea consectetur et est culpa et culpa duis.
 
+\begin{table}[H]
+	\centering
+	\caption{Métricas de calidad para la imagen 2015\_00002.png}
+	\label{tab:metricas_2015_00002}
+
+	% Ajuste de espacios verticales
+	\vspace{0.5em} % Reduce espacio superior
+
+	\resizebox{\linewidth}{!}{%
+		\begin{tabular}{@{}lrrrrr@{}} % @{} elimina espacios horizontales
+			\toprule
+			\textbf{Método} & \textbf{AMBE} & \textbf{PSNR} & \textbf{Entropía} & \textbf{Contraste} & \textbf{Uniformidad} \\
+			\midrule
+			CLAHE           & 41.03         & 14.27         & 7.91              & 64.99              & 0.629                \\
+			HE              & 58.78         & 11.45         & 7.15              & 73.61              & 0.635                \\
+			DQHEPL          & 6.20          & 24.14         & 7.25              & 54.04              & 0.583                \\
+			BHEPL-D         & 8.38          & 23.82         & 7.26              & 55.01              & 0.586                \\
+			\bottomrule
+		\end{tabular}%
+	}
+
+	\vspace{0.5em} % Reduce espacio inferior
+	\footnotesize%
+	\textit{Nota: AMBE (Absolute Mean Brightness Error), PSNR (Peak Signal-to-Noise Ratio).}
+\end{table}
+
 Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad
 nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia.
 Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim
@@ -136,44 +265,48 @@ reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris s
 ullamco ut ea consectetur et est culpa et culpa duis.
 
 \begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.45\textwidth}
-        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/original_histograma.pgf}}
-        \caption{Original}
-        \label{fig:original_1}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
-        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/dqhepl_histograma.pgf}}
-        \caption{DQHEPL}
-        \label{fig:dqhepl_1}
-    \end{subfigure}
-    
-    \vspace{5mm}
-    
-    \begin{subfigure}[b]{0.45\textwidth}
-        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/he_histograma.pgf}}
-        \caption{HE}
-        \label{fig:he_1}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
-        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/clahe_histograma.pgf}}
-        \caption{CLAHE}
-        \label{fig:clahe_1}
-    \end{subfigure}
-    
-    \vspace{5mm}
-    
-    \centering
-    \begin{subfigure}[b]{0.45\textwidth}
-        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/bhepl-d_histograma.pgf}}
-        \caption{BHEPL-D}
-        \label{fig:bhepl_1}
-    \end{subfigure}
-    
-    \caption{Comparación de histogramas para la imagen 2015\_00002}
-    \label{fig:histogramas_1}
+	\centering
+
+	% Primera fila (2 histogramas)
+	\begin{subfigure}[b]{0.45\textwidth}
+		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/original_histograma.pgf}}
+		\caption{Original}
+		\label{fig:original_1}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/dqhepl_histograma.pgf}}
+		\caption{DQHEPL}
+		\label{fig:dqhepl_1}
+	\end{subfigure}
+
+	% Espacio entre filas
+	\vspace{5mm}
+
+	% Segunda fila (2 histogramas)
+	\begin{subfigure}[b]{0.45\textwidth}
+		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/he_histograma.pgf}}
+		\caption{HE}
+		\label{fig:he_1}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/clahe_histograma.pgf}}
+		\caption{CLAHE}
+		\label{fig:clahe_1}
+	\end{subfigure}
+
+	% Tercera fila (1 histograma centrado)
+	\vspace{5mm}
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth}
+		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/bhepl-d_histograma.pgf}}
+		\caption{BHEPL-D}
+		\label{fig:bhepl_1}
+	\end{subfigure}
+
+	\caption{Comparación de histogramas para la imagen 2015\_00002}
+	\label{fig:histogramas_1}
 \end{figure}
 
 \subsubsection{Análisis de imagen 2015\_00026}
@@ -188,44 +321,44 @@ reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris s
 ullamco ut ea consectetur et est culpa et culpa duis.
 
 \begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.45\textwidth}
-        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/original_histograma.pgf}}
-        \caption{Original}
-        \label{fig:original_2}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
-        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/dqhepl_histograma.pgf}}
-        \caption{DQHEPL}
-        \label{fig:dqhepl_2}
-    \end{subfigure}
-    
-    \vspace{5mm}
-    
-    \begin{subfigure}[b]{0.45\textwidth}
-        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/he_histograma.pgf}}
-        \caption{HE}
-        \label{fig:he_2}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
-        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/clahe_histograma.pgf}}
-        \caption{CLAHE}
-        \label{fig:clahe_2}
-    \end{subfigure}
-    
-    \vspace{5mm}
-    
-    \centering
-    \begin{subfigure}[b]{0.45\textwidth}
-        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/bhepl-d_histograma.pgf}}
-        \caption{BHEPL-D}
-        \label{fig:bhepl_2}
-    \end{subfigure}
-    
-    \caption{Comparación de histogramas para la imagen 2015\_00026}
-    \label{fig:histogramas_2}
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth}
+		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/original_histograma.pgf}}
+		\caption{Original}
+		\label{fig:original_2}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/dqhepl_histograma.pgf}}
+		\caption{DQHEPL}
+		\label{fig:dqhepl_2}
+	\end{subfigure}
+
+	\vspace{5mm}
+
+	\begin{subfigure}[b]{0.45\textwidth}
+		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/he_histograma.pgf}}
+		\caption{HE}
+		\label{fig:he_2}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/clahe_histograma.pgf}}
+		\caption{CLAHE}
+		\label{fig:clahe_2}
+	\end{subfigure}
+
+	\vspace{5mm}
+
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth}
+		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/bhepl-d_histograma.pgf}}
+		\caption{BHEPL-D}
+		\label{fig:bhepl_2}
+	\end{subfigure}
+
+	\caption{Comparación de histogramas para la imagen 2015\_00026}
+	\label{fig:histogramas_2}
 \end{figure}
 
 \subsubsection{Análisis de imagen 2015\_00027}
@@ -233,44 +366,44 @@ ullamco ut ea consectetur et est culpa et culpa duis.
 Texto de análisis para la tercera imagen...
 
 \begin{figure}[H]
-    \centering
-    \begin{subfigure}[b]{0.45\textwidth}
-        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/original_histograma.pgf}}
-        \caption{Original}
-        \label{fig:original_3}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
-        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/dqhepl_histograma.pgf}}
-        \caption{DQHEPL}
-        \label{fig:dqhepl_3}
-    \end{subfigure}
-    
-    \vspace{5mm}
-    
-    \begin{subfigure}[b]{0.45\textwidth}
-        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/he_histograma.pgf}}
-        \caption{HE}
-        \label{fig:he_3}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
-        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/clahe_histograma.pgf}}
-        \caption{CLAHE}
-        \label{fig:clahe_3}
-    \end{subfigure}
-    
-    \vspace{5mm}
-    
-    \centering
-    \begin{subfigure}[b]{0.45\textwidth}
-        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/bhepl-d_histograma.pgf}}
-        \caption{BHEPL-D}
-        \label{fig:bhepl_3}
-    \end{subfigure}
-    
-    \caption{Comparación de histogramas para la imagen 2015\_00027}
-    \label{fig:histogramas_3}
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth}
+		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/original_histograma.pgf}}
+		\caption{Original}
+		\label{fig:original_3}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/dqhepl_histograma.pgf}}
+		\caption{DQHEPL}
+		\label{fig:dqhepl_3}
+	\end{subfigure}
+
+	\vspace{5mm}
+
+	\begin{subfigure}[b]{0.45\textwidth}
+		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/he_histograma.pgf}}
+		\caption{HE}
+		\label{fig:he_3}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.45\textwidth}
+		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/clahe_histograma.pgf}}
+		\caption{CLAHE}
+		\label{fig:clahe_3}
+	\end{subfigure}
+
+	\vspace{5mm}
+
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth}
+		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/bhepl-d_histograma.pgf}}
+		\caption{BHEPL-D}
+		\label{fig:bhepl_3}
+	\end{subfigure}
+
+	\caption{Comparación de histogramas para la imagen 2015\_00027}
+	\label{fig:histogramas_3}
 \end{figure}
 
 \subsection{Resultados Cuantitativos}

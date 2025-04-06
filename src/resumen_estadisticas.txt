@@ -1,0 +1,27 @@
+== CLAHE ==
+AMBE promedio:     18.57  Mediana: 18.56
+PSNR promedio:     20.47  Mediana: 19.96
+Entropía promedio: 6.55  Mediana: 6.90
+Contraste promedio:48.94  Mediana: 50.52
+Uniformidad promedio:0.5296  Mediana: 0.5359
+
+== HE ==
+AMBE promedio:     83.84  Mediana: 84.77
+PSNR promedio:     8.80  Mediana: 8.45
+Entropía promedio: 5.66  Mediana: 5.91
+Contraste promedio:73.50  Mediana: 72.99
+Uniformidad promedio:0.6204  Mediana: 0.6382
+
+== DQHEPL ==
+AMBE promedio:     6.89  Mediana: 6.45
+PSNR promedio:     24.43  Mediana: 23.38
+Entropía promedio: 5.78  Mediana: 6.05
+Contraste promedio:54.79  Mediana: 53.85
+Uniformidad promedio:0.4383  Mediana: 0.4423
+
+== BHEPL-D ==
+AMBE promedio:     4.79  Mediana: 3.97
+PSNR promedio:     29.78  Mediana: 29.60
+Entropía promedio: 5.74  Mediana: 6.11
+Contraste promedio:47.37  Mediana: 47.08
+Uniformidad promedio:0.4529  Mediana: 0.4569

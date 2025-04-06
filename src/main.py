@@ -27,6 +27,8 @@ os.makedirs(output_dir, exist_ok=True)
 histogram_dir = "histogramas"
 os.makedirs(histogram_dir, exist_ok=True)
 
+estadisticas = "estadisticas"
+os.makedirs(estadisticas, exist_ok=True)
 
 def plot_histograms_and_save(images, titles, base_filename):
     """
@@ -180,19 +182,42 @@ def main():
             file_path = os.path.join(directory, filename)
             img = medidas.read_image_as_grayscale(file_path)
             clahe, he, dqhepl, bhepl_d = apply_all_methods(img)
-
-            # Calcular las métricas de imagen para cada método
-            for name, processed in zip(
-                ["CLAHE", "HE", "DQHEPL", "BHEPL-D"],
-                [clahe, he, dqhepl, bhepl_d],
-            ):
-                metricas[name]["ambe"].append(medidas.calculate_ambe(img, processed))
-                metricas[name]["psnr"].append(medidas.calculate_psnr(img, processed))
-                metricas[name]["entropy"].append(medidas.calculate_entropy(processed))
-                metricas[name]["contrast"].append(medidas.calculate_contrast(processed))
-                metricas[name]["uniformity"].append(
-                    medidas.calculate_uniformity(processed)
-                )  # Nueva métrica de uniformidad
+            
+            # Crear archivo de estadísticas para este archivo
+            stats_filename = os.path.splitext(filename)[0] + "_stats.txt"
+            stats_path = os.path.join(estadisticas, stats_filename)
+            
+            with open(stats_path, 'w') as stats_file:
+                stats_file.write(f"Estadísticas para: {filename}\n")
+                stats_file.write("="*50 + "\n\n")
+                
+                # Calcular y guardar métricas para cada método
+                for name, processed in zip(
+                    ["CLAHE", "HE", "DQHEPL", "BHEPL-D"],
+                    [clahe, he, dqhepl, bhepl_d],
+                ):
+                    # Calcular métricas
+                    ambe = medidas.calculate_ambe(img, processed)
+                    psnr = medidas.calculate_psnr(img, processed)
+                    entropy = medidas.calculate_entropy(processed)
+                    contrast = medidas.calculate_contrast(processed)
+                    uniformity = medidas.calculate_uniformity(processed)
+                    
+                    # Guardar en el diccionario general
+                    metricas[name]["ambe"].append(ambe)
+                    metricas[name]["psnr"].append(psnr)
+                    metricas[name]["entropy"].append(entropy)
+                    metricas[name]["contrast"].append(contrast)
+                    metricas[name]["uniformity"].append(uniformity)
+                    
+                    # Escribir en el archivo
+                    stats_file.write(f"Método: {name}\n")
+                    stats_file.write(f"AMBE: {ambe:.4f}\n")
+                    stats_file.write(f"PSNR: {psnr:.4f}\n")
+                    stats_file.write(f"Entropía: {entropy:.4f}\n")
+                    stats_file.write(f"Contraste: {contrast:.4f}\n")
+                    stats_file.write(f"Uniformidad: {uniformity:.4f}\n")
+                    stats_file.write("-"*40 + "\n\n")
 
         print("Resumen de métricas:\n")
         for metodo, datos in metricas.items():
