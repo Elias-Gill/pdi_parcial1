@@ -45,7 +45,7 @@ def plot_histograms_and_save(images, titles, base_filename):
 
         # Guardar el gráfico como imagen en la carpeta específica
         histogram_path = os.path.join(
-            image_folder, f"{titles[i].lower().replace(' ', '_')}_histograma.png"
+            image_folder, f"{titles[i].lower().replace(' ', '_')}_histograma.pgf"
         )
         plt.savefig(histogram_path)
         plt.close()

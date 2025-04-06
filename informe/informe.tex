@@ -1,12 +1,31 @@
-\documentclass[sigconf]{acmart}
+\documentclass[sigchi]{acmart}
+
+% para histogramas
+\usepackage{pgf}                  % Para cargar archivos .pgf
+\usepackage{pgfplots}             % Para gráficos avanzados
+\pgfplotsset{compat=1.18}         % Versión estable
+\usepackage{caption}
+\captionsetup[figure]{font=small} % small, footnotesize, o scriptsize
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{subcaption}
+
+% removes footnote with conference information in first column
+\renewcommand\footnotetextcopyrightpermission[1]{}
+\pagestyle{plain} % removes running headers
+\setcopyright{none}
+
+% Elimina la línea "ACM Reference Format" y el titulo de conferencia
+\settopmatter{printacmref=false, printfolios=false}
+\acmConference[Facultad Politécnica]{2025}{San Lorenzo, Paraguay}
 
 % Para poner letras de colores
 \usepackage{xcolor}
 \newcommand{\rojo}[1]{\textcolor{red}{#1}}
 
 % Metadata del documento
-\title{Título del Artículo}
-\subtitle{Opcional: Subtítulo del Artículo}
+\title{Comparación de Algoritmos de Mejora de Contraste de Imágenes}
+\subtitle{CLAHE, HE, DQHEPL y BHEPL-D}
 
 % Autores
 \author{Elias Sebastian Gill Quintana}
@@ -42,17 +61,255 @@ Falta completar \rojo{Completar}
 \maketitle
 
 \section{Introducción}
-Aquí empieza la introducción de tu artículo. Puedes agregar subsecciones o más secciones según sea necesario.
-Aquí citamos un artículo~
-\cite{ejemplo}.
+\subsection{Contexto y Motivación}
+- Breve descripción de la importancia de la mejora de contraste en imágenes.
+- Relevancia de las técnicas de procesamiento de imágenes en diversas aplicaciones (medicina, industria, etc.).
 
-\section{Trabajo Relacionado}
-Incluye aquí los trabajos previos o literatura relevante.
+\subsection{Objetivo}
+- Explicar el propósito del informe:
+comparar la efectividad de cuatro algoritmos de mejora de contraste.
 
-\section{Conclusión}
-Finaliza tu documento con conclusiones y trabajos futuros.
+\subsection{Estructura del Informe}
+- Resumen de las secciones del informe.
+
+\section{Metodología}
+\subsection{Descripción de los Algoritmos}
+\subsubsection{CLAHE (Contrast Limited Adaptive Histogram Equalization)}
+- Explicación del algoritmo.
+- Detalles sobre los parámetros utilizados (clipLimit, tileGridSize).
+
+\subsubsection{HE (Histogram Equalization)}
+- Explicación del algoritmo.
+- Comparativa con CLAHE.
+
+\subsubsection{DQHEPL (Dynamic Quantization-based Histogram Equalization with Pulse-Level Enhancement)}
+- Explicación del algoritmo.
+- Características particulares.
+
+\subsubsection{BHEPL-D (Bilateral Histogram Equalization with Pulse-Level Enhancement and Denoising)}
+- Explicación del algoritmo.
+- Detalles sobre cómo mejora la técnica HE tradicional.
+
+\subsection{Preparación de las Imágenes}
+- Detalles sobre el conjunto de datos utilizado.
+- Preprocesamiento de las imágenes (si aplica).
+
+\subsection{Métricas de Evaluación}
+\subsubsection{AMBE (Average Mean Brightness Error)}
+- Definición y utilidad de AMBE.
+
+\subsubsection{PSNR (Peak Signal-to-Noise Ratio)}
+- Definición y cómo se utiliza para evaluar la calidad de las imágenes.
+
+\subsubsection{Entropía}
+- Explicación de la entropía como medida de la cantidad de información en una imagen.
+
+\subsubsection{Contraste}
+- Definición de contraste en el contexto de las imágenes y su impacto visual.
+
+\section{Resultados}
+\subsection{Evaluación Visual}
+- Comparación visual de las imágenes originales y las mejoradas con cada algoritmo.
+- Uso de imágenes de ejemplo para ilustrar las diferencias.
+
+\newpage
+\subsection{Evaluación de Histogramas}
+
+\subsubsection{Análisis imagen 2015\_00002}
+
+Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad
+nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia.
+Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim
+nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex
+occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate.
+Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua
+reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat
+ullamco ut ea consectetur et est culpa et culpa duis.
+
+Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad
+nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia.
+Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim
+nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex
+occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate.
+Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua
+reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat
+ullamco ut ea consectetur et est culpa et culpa duis.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/original_histograma.pgf}}
+        \caption{Original}
+        \label{fig:original_1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/dqhepl_histograma.pgf}}
+        \caption{DQHEPL}
+        \label{fig:dqhepl_1}
+    \end{subfigure}
+    
+    \vspace{5mm}
+    
+    \begin{subfigure}[b]{0.45\textwidth}
+        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/he_histograma.pgf}}
+        \caption{HE}
+        \label{fig:he_1}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/clahe_histograma.pgf}}
+        \caption{CLAHE}
+        \label{fig:clahe_1}
+    \end{subfigure}
+    
+    \vspace{5mm}
+    
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/bhepl-d_histograma.pgf}}
+        \caption{BHEPL-D}
+        \label{fig:bhepl_1}
+    \end{subfigure}
+    
+    \caption{Comparación de histogramas para la imagen 2015\_00002}
+    \label{fig:histogramas_1}
+\end{figure}
+
+\subsubsection{Análisis de imagen 2015\_00026}
+
+Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad
+nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia.
+Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim
+nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex
+occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate.
+Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua
+reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat
+ullamco ut ea consectetur et est culpa et culpa duis.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/original_histograma.pgf}}
+        \caption{Original}
+        \label{fig:original_2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/dqhepl_histograma.pgf}}
+        \caption{DQHEPL}
+        \label{fig:dqhepl_2}
+    \end{subfigure}
+    
+    \vspace{5mm}
+    
+    \begin{subfigure}[b]{0.45\textwidth}
+        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/he_histograma.pgf}}
+        \caption{HE}
+        \label{fig:he_2}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/clahe_histograma.pgf}}
+        \caption{CLAHE}
+        \label{fig:clahe_2}
+    \end{subfigure}
+    
+    \vspace{5mm}
+    
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/bhepl-d_histograma.pgf}}
+        \caption{BHEPL-D}
+        \label{fig:bhepl_2}
+    \end{subfigure}
+    
+    \caption{Comparación de histogramas para la imagen 2015\_00026}
+    \label{fig:histogramas_2}
+\end{figure}
+
+\subsubsection{Análisis de imagen 2015\_00027}
+
+Texto de análisis para la tercera imagen...
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/original_histograma.pgf}}
+        \caption{Original}
+        \label{fig:original_3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/dqhepl_histograma.pgf}}
+        \caption{DQHEPL}
+        \label{fig:dqhepl_3}
+    \end{subfigure}
+    
+    \vspace{5mm}
+    
+    \begin{subfigure}[b]{0.45\textwidth}
+        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/he_histograma.pgf}}
+        \caption{HE}
+        \label{fig:he_3}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.45\textwidth}
+        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/clahe_histograma.pgf}}
+        \caption{CLAHE}
+        \label{fig:clahe_3}
+    \end{subfigure}
+    
+    \vspace{5mm}
+    
+    \centering
+    \begin{subfigure}[b]{0.45\textwidth}
+        \resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/bhepl-d_histograma.pgf}}
+        \caption{BHEPL-D}
+        \label{fig:bhepl_3}
+    \end{subfigure}
+    
+    \caption{Comparación de histogramas para la imagen 2015\_00027}
+    \label{fig:histogramas_3}
+\end{figure}
+
+\subsection{Resultados Cuantitativos}
+\subsubsection{Análisis de AMBE}
+- Comparación de los valores promedio de AMBE para cada algoritmo.
+
+\subsubsection{Análisis de PSNR}
+- Comparación de los valores promedio de PSNR para cada algoritmo.
+
+\subsubsection{Análisis de Entropía}
+- Comparación de los valores promedio de entropía para cada algoritmo.
+
+\subsubsection{Análisis de Contraste}
+- Comparación de los valores promedio de contraste para cada algoritmo.
+
+\subsection{Discusión de los Resultados}
+- Interpretación de los resultados obtenidos.
+- Comparación de los algoritmos en términos de sus métricas de evaluación.
+- Discusión sobre la efectividad de cada algoritmo.
+
+\section{Conclusiones}
+\subsection{Resumen de Hallazgos}
+- Resumen de los principales resultados obtenidos de la comparación de los algoritmos.
+
+\subsection{Recomendaciones}
+- Recomendaciones sobre cuál algoritmo es el más efectivo en función de las métricas utilizadas.
+- Posibles mejoras o ajustes que se podrían hacer en los algoritmos.
+
+\subsection{Trabajo Futuro}
+- Sugerencias para futuras investigaciones y mejoras en los algoritmos de mejora de contraste.
+
+\section{Referencias}
+- Lista de fuentes y trabajos relacionados con los algoritmos de mejora de contraste y procesamiento de imágenes.
+
+\section{Apéndices (si es necesario)}
+- Detalles adicionales que no se incluyeron en el cuerpo principal del informe, como códigos, tablas de resultados completos, gráficos adicionales, etc.
 
 % Bibliografía
+\nocite{*} % Incluye TODAS las referencias del .bib sin citarlas
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{bibliography}
 

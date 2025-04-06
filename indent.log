@@ -1,0 +1,37 @@
+INFO:  latexindent version 3.24.4, 2024-07-18, a script to indent .tex files
+       latexindent lives here: /home/elias/.local/share/nvim/mason/packages/latexindent/
+       Sun Apr  6 13:16:54 2025
+       Reading input from STDIN
+INFO:  Processing switches:
+INFO:  Directory for backup files and log file indent.log:
+       .
+INFO:  YAML settings read: defaultSettings.yaml
+       Reading defaultSettings.yaml from /home/elias/.local/share/nvim/mason/packages/latexindent/defaultSettings.yaml
+       Reading defaultSettings.yaml (2nd attempt) from /home/elias/.local/share/nvim/mason/packages/latexindent/../../texmf-dist/scripts/latexindent/defaultSettings.yaml
+       and then, if necessary, /home/elias/.local/share/nvim/mason/packages/latexindent/LatexIndent/defaultSettings.yaml
+INFO:  YAML reading settings
+       The $XDG_CONFIG_HOME variable and the config file in "/home/elias/.config//latexindent/indentconfig.yaml" were recognized
+       The value of $XDG_CONFIG_HOME is: "/home/elias/.config/"
+       Reading path information from /home/elias/.config//latexindent/indentconfig.yaml
+       ---
+       paths: []
+       textWrapOptions:
+         columns: '12'
+         comments:
+           inheritLeadingSpace: '0'
+           wrap: '0'
+         huge: overflow
+         multipleSpacesToSingle: '1'
+         removeBlockLineBreaks: '1'
+         separator: ''
+         when: before
+
+INFO:  Phase 1: searching for objects
+INFO:  Phase 2: finding surrounding indentation
+INFO:  Phase 3: indenting objects
+INFO:  Phase 4: final indentation check
+INFO:  Output routine:
+       Not outputting to file; see -w and -o switches for more options.
+       --------------
+INFO:  Please direct all communication/issues to:
+        https://github.com/cmhughes/latexindent.pl
