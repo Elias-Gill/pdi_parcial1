@@ -25,6 +25,16 @@ def calculate_entropy(image):
     return entropy(hist, base=2)
 
 
+def calculate_uniformity(image):
+    """
+    Calcula la uniformidad usando el Coeficiente de Variación (CV).
+    Devuelve un valor entre 0 (máxima no uniformidad) y 1 (máxima uniformidad).
+    """
+    mean, std = cv2.meanStdDev(image)
+    mean = mean[0][0] if mean[0][0] != 0 else 1e-10  # Evitar división por cero
+    cv = std[0][0] / mean
+    return 1 / (1 + cv)  # Normalizado a [0, 1]
+
 def calculate_contrast(image):
     """Calcula el contraste como la desviación estándar de las intensidades de los píxeles."""
     return np.std(image)

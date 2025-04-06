@@ -146,10 +146,34 @@ def main():
     # sin flag
     else:
         metricas = {
-            "CLAHE": {"ambe": [], "psnr": [], "entropy": [], "contrast": []},
-            "HE": {"ambe": [], "psnr": [], "entropy": [], "contrast": []},
-            "DQHEPL": {"ambe": [], "psnr": [], "entropy": [], "contrast": []},
-            "BHEPL-D": {"ambe": [], "psnr": [], "entropy": [], "contrast": []},
+            "CLAHE": {
+                "ambe": [],
+                "psnr": [],
+                "entropy": [],
+                "contrast": [],
+                "uniformity": [],
+            },
+            "HE": {
+                "ambe": [],
+                "psnr": [],
+                "entropy": [],
+                "contrast": [],
+                "uniformity": [],
+            },
+            "DQHEPL": {
+                "ambe": [],
+                "psnr": [],
+                "entropy": [],
+                "contrast": [],
+                "uniformity": [],
+            },
+            "BHEPL-D": {
+                "ambe": [],
+                "psnr": [],
+                "entropy": [],
+                "contrast": [],
+                "uniformity": [],
+            },
         }
 
         for filename in files:
@@ -157,7 +181,7 @@ def main():
             img = medidas.read_image_as_grayscale(file_path)
             clahe, he, dqhepl, bhepl_d = apply_all_methods(img)
 
-            # calcular las metricas de imagen para cada metodo
+            # Calcular las métricas de imagen para cada método
             for name, processed in zip(
                 ["CLAHE", "HE", "DQHEPL", "BHEPL-D"],
                 [clahe, he, dqhepl, bhepl_d],
@@ -166,14 +190,28 @@ def main():
                 metricas[name]["psnr"].append(medidas.calculate_psnr(img, processed))
                 metricas[name]["entropy"].append(medidas.calculate_entropy(processed))
                 metricas[name]["contrast"].append(medidas.calculate_contrast(processed))
+                metricas[name]["uniformity"].append(
+                    medidas.calculate_uniformity(processed)
+                )  # Nueva métrica de uniformidad
 
         print("Resumen de métricas:\n")
         for metodo, datos in metricas.items():
             print(f"== {metodo} ==")
-            print(f"AMBE promedio:     {np.mean(datos['ambe']):.2f}")
-            print(f"PSNR promedio:     {np.mean(datos['psnr']):.2f}")
-            print(f"Entropía promedio: {np.mean(datos['entropy']):.2f}")
-            print(f"Contraste promedio:{np.mean(datos['contrast']):.2f}")
+            print(
+                f"AMBE promedio:     {np.mean(datos['ambe']):.2f}  Mediana: {np.median(datos['ambe']):.2f}"
+            )
+            print(
+                f"PSNR promedio:     {np.mean(datos['psnr']):.2f}  Mediana: {np.median(datos['psnr']):.2f}"
+            )
+            print(
+                f"Entropía promedio: {np.mean(datos['entropy']):.2f}  Mediana: {np.median(datos['entropy']):.2f}"
+            )
+            print(
+                f"Contraste promedio:{np.mean(datos['contrast']):.2f}  Mediana: {np.median(datos['contrast']):.2f}"
+            )
+            print(
+                f"Uniformidad promedio:{np.mean(datos['uniformity']):.4f}  Mediana: {np.median(datos['uniformity']):.4f}"
+            )
             print()
 
 
