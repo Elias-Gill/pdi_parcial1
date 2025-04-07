@@ -9,6 +9,7 @@ Created on 2025-04-05 12:30:36
 
 import os
 import cv2
+import time
 import numpy as np
 import matplotlib.pyplot as plt
 import metodos
@@ -29,6 +30,7 @@ os.makedirs(histogram_dir, exist_ok=True)
 
 estadisticas = "estadisticas"
 os.makedirs(estadisticas, exist_ok=True)
+
 
 def plot_histograms_and_save(images, titles, base_filename):
     """
@@ -145,8 +147,9 @@ def main():
                 ["clahe", "he", "dqhepl", "bhepl_d"],
             )
 
-    # sin flag
+        # sin flag
     else:
+        # Inicializar estructura para métricas
         metricas = {
             "CLAHE": {
                 "ambe": [],
@@ -154,6 +157,7 @@ def main():
                 "entropy": [],
                 "contrast": [],
                 "uniformity": [],
+                "time": [],
             },
             "HE": {
                 "ambe": [],
@@ -161,6 +165,7 @@ def main():
                 "entropy": [],
                 "contrast": [],
                 "uniformity": [],
+                "time": [],
             },
             "DQHEPL": {
                 "ambe": [],
@@ -168,6 +173,7 @@ def main():
                 "entropy": [],
                 "contrast": [],
                 "uniformity": [],
+                "time": [],
             },
             "BHEPL-D": {
                 "ambe": [],
@@ -175,69 +181,130 @@ def main():
                 "entropy": [],
                 "contrast": [],
                 "uniformity": [],
+                "time": [],
             },
         }
 
-        for filename in files:
-            file_path = os.path.join(directory, filename)
-            img = medidas.read_image_as_grayscale(file_path)
-            clahe, he, dqhepl, bhepl_d = apply_all_methods(img)
-            
-            # Crear archivo de estadísticas para este archivo
-            stats_filename = os.path.splitext(filename)[0] + "_stats.txt"
-            stats_path = os.path.join(estadisticas, stats_filename)
-            
-            with open(stats_path, 'w') as stats_file:
-                stats_file.write(f"Estadísticas para: {filename}\n")
-                stats_file.write("="*50 + "\n\n")
-                
-                # Calcular y guardar métricas para cada método
-                for name, processed in zip(
-                    ["CLAHE", "HE", "DQHEPL", "BHEPL-D"],
-                    [clahe, he, dqhepl, bhepl_d],
-                ):
-                    # Calcular métricas
-                    ambe = medidas.calculate_ambe(img, processed)
-                    psnr = medidas.calculate_psnr(img, processed)
-                    entropy = medidas.calculate_entropy(processed)
-                    contrast = medidas.calculate_contrast(processed)
-                    uniformity = medidas.calculate_uniformity(processed)
-                    
-                    # Guardar en el diccionario general
-                    metricas[name]["ambe"].append(ambe)
-                    metricas[name]["psnr"].append(psnr)
-                    metricas[name]["entropy"].append(entropy)
-                    metricas[name]["contrast"].append(contrast)
-                    metricas[name]["uniformity"].append(uniformity)
-                    
-                    # Escribir en el archivo
-                    stats_file.write(f"Método: {name}\n")
-                    stats_file.write(f"AMBE: {ambe:.4f}\n")
-                    stats_file.write(f"PSNR: {psnr:.4f}\n")
-                    stats_file.write(f"Entropía: {entropy:.4f}\n")
-                    stats_file.write(f"Contraste: {contrast:.4f}\n")
-                    stats_file.write(f"Uniformidad: {uniformity:.4f}\n")
-                    stats_file.write("-"*40 + "\n\n")
+        # Verificar si hay archivos para procesar
+        if not files:
+            print("¡No se encontraron archivos en el directorio!")
+        else:
+            print(f"\nProcesando {len(files)} imágenes...")
 
-        print("Resumen de métricas:\n")
-        for metodo, datos in metricas.items():
-            print(f"== {metodo} ==")
-            print(
-                f"AMBE promedio:     {np.mean(datos['ambe']):.2f}  Mediana: {np.median(datos['ambe']):.2f}"
-            )
-            print(
-                f"PSNR promedio:     {np.mean(datos['psnr']):.2f}  Mediana: {np.median(datos['psnr']):.2f}"
-            )
-            print(
-                f"Entropía promedio: {np.mean(datos['entropy']):.2f}  Mediana: {np.median(datos['entropy']):.2f}"
-            )
-            print(
-                f"Contraste promedio:{np.mean(datos['contrast']):.2f}  Mediana: {np.median(datos['contrast']):.2f}"
-            )
-            print(
-                f"Uniformidad promedio:{np.mean(datos['uniformity']):.4f}  Mediana: {np.median(datos['uniformity']):.4f}"
-            )
-            print()
+            for filename in files:
+                file_path = os.path.join(directory, filename)
+
+                try:
+                    img = medidas.read_image_as_grayscale(file_path)
+
+                    # Medir tiempos de procesamiento
+                    tiempos = {}
+                    start = time.perf_counter()
+                    clahe = metodos.apply_clahe(img)
+                    tiempos["CLAHE"] = time.perf_counter() - start
+
+                    start = time.perf_counter()
+                    he = metodos.apply_histogram_equalization(img)
+                    tiempos["HE"] = time.perf_counter() - start
+
+                    start = time.perf_counter()
+                    dqhepl = metodos.apply_dqhepl(img)
+                    tiempos["DQHEPL"] = time.perf_counter() - start
+
+                    start = time.perf_counter()
+                    bhepl_d = metodos.apply_bhepl_d(img)
+                    tiempos["BHEPL-D"] = time.perf_counter() - start
+
+                    # Guardar estadísticas individuales
+                    stats_filename = os.path.splitext(filename)[0] + "_stats.txt"
+                    stats_path = os.path.join(estadisticas, stats_filename)
+
+                    with open(stats_path, "w") as stats_file:
+                        stats_file.write(f"Estadísticas para: {filename}\n")
+                        stats_file.write("=" * 50 + "\n\n")
+
+                        for name, processed in zip(
+                            ["CLAHE", "HE", "DQHEPL", "BHEPL-D"],
+                            [clahe, he, dqhepl, bhepl_d],
+                        ):
+                            # Calcular métricas
+                            ambe = medidas.calculate_ambe(img, processed)
+                            psnr = medidas.calculate_psnr(img, processed)
+                            entropy = medidas.calculate_entropy(processed)
+                            contrast = medidas.calculate_contrast(processed)
+                            uniformity = medidas.calculate_uniformity(processed)
+                            tiempo = tiempos[name]
+
+                            # Almacenar métricas
+                            metricas[name]["ambe"].append(ambe)
+                            metricas[name]["psnr"].append(psnr)
+                            metricas[name]["entropy"].append(entropy)
+                            metricas[name]["contrast"].append(contrast)
+                            metricas[name]["uniformity"].append(uniformity)
+                            metricas[name]["time"].append(tiempo)
+
+                            # Escribir en archivo
+                            stats_file.write(f"Método: {name}\n")
+                            stats_file.write(f"AMBE: {ambe:.4f}\n")
+                            stats_file.write(f"PSNR: {psnr:.4f} dB\n")
+                            stats_file.write(f"Entropía: {entropy:.4f}\n")
+                            stats_file.write(f"Contraste: {contrast:.4f}\n")
+                            stats_file.write(f"Uniformidad: {uniformity:.4f}\n")
+                            stats_file.write(f"Tiempo: {tiempo*1000:.2f} ms\n")
+                            stats_file.write("-" * 40 + "\n\n")
+
+                except Exception as e:
+                    print(f"Error procesando {filename}: {str(e)}")
+                    continue
+
+            for metodo in metricas:
+                if not metricas[metodo]["ambe"]:
+                    print(f"{metodo}: No hay datos disponibles")
+                    continue
+
+                # Calcular estadísticas
+                stats = {
+                    "ambe_mean": np.mean(metricas[metodo]["ambe"]),
+                    "ambe_med": np.median(metricas[metodo]["ambe"]),
+                    "psnr_mean": np.mean(metricas[metodo]["psnr"]),
+                    "psnr_med": np.median(metricas[metodo]["psnr"]),
+                    "entropy_mean": np.mean(metricas[metodo]["entropy"]),
+                    "entropy_med": np.median(metricas[metodo]["entropy"]),
+                    "contrast_mean": np.mean(metricas[metodo]["contrast"]),
+                    "contrast_med": np.median(metricas[metodo]["contrast"]),
+                    "uniformity_mean": np.mean(metricas[metodo]["uniformity"]),
+                    "uniformity_med": np.median(metricas[metodo]["uniformity"]),
+                    "time_mean": np.mean(metricas[metodo]["time"])
+                    * 1000,  # Convertir a ms
+                }
+
+            # RESULTADOS FINALES MEJORADOS (esto es lo nuevo que necesitas)
+            print("\n\n=== RESUMEN ESTADÍSTICO ===")
+            print("Método       | AMBE (↓)        | PSNR (↑)       | Entropía       | Contraste     | Uniformidad   | Tiempo (ms)")
+            print("             | Media   Mediana | Media  Mediana | Media Mediana  | Media Mediana | Media Mediana | Media")
+            print("-" * 120)
+
+            for metodo in ["CLAHE", "HE", "DQHEPL", "BHEPL-D"]:
+                datos = metricas[metodo]
+
+                # Solo si hay datos procesados
+                if datos["ambe"]:
+                    print(
+                        f"{metodo:<12}| "
+                        f"{np.mean(datos['ambe']):6.2f}  {np.median(datos['ambe']):6.2f} | "
+                        f"{np.mean(datos['psnr']):6.2f}  {np.median(datos['psnr']):6.2f} | "
+                        f"{np.mean(datos['entropy']):5.2f}  {np.median(datos['entropy']):5.2f} | "
+                        f"{np.mean(datos['contrast']):6.2f}  {np.median(datos['contrast']):6.2f} | "
+                        f"{np.mean(datos['uniformity']):5.4f}  {np.median(datos['uniformity']):5.4f} | "
+                        f"{np.mean(datos['time'])*1000:7.2f}"
+                    )
+
+            # Explicación de métricas
+            print("\nLEYENDA:")
+            print("- AMBE: Absolute Mean Brightness Error (menor es mejor)")
+            print("- PSNR: Peak Signal-to-Noise Ratio en dB (mayor es mejor)")
+            print("- Uniformidad: 1 = máxima uniformidad")
+            print("- Tiempos en milisegundos (menor es mejor)")
 
 
 if __name__ == "__main__":
