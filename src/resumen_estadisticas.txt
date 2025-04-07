@@ -1,27 +1,18 @@
-== CLAHE ==
-AMBE promedio:     18.57  Mediana: 18.56
-PSNR promedio:     20.47  Mediana: 19.96
-Entropía promedio: 6.55  Mediana: 6.90
-Contraste promedio:48.94  Mediana: 50.52
-Uniformidad promedio:0.5296  Mediana: 0.5359
 
-== HE ==
-AMBE promedio:     83.84  Mediana: 84.77
-PSNR promedio:     8.80  Mediana: 8.45
-Entropía promedio: 5.66  Mediana: 5.91
-Contraste promedio:73.50  Mediana: 72.99
-Uniformidad promedio:0.6204  Mediana: 0.6382
+Procesando 400 imágenes...
 
-== DQHEPL ==
-AMBE promedio:     6.89  Mediana: 6.45
-PSNR promedio:     24.43  Mediana: 23.38
-Entropía promedio: 5.78  Mediana: 6.05
-Contraste promedio:54.79  Mediana: 53.85
-Uniformidad promedio:0.4383  Mediana: 0.4423
 
-== BHEPL-D ==
-AMBE promedio:     4.79  Mediana: 3.97
-PSNR promedio:     29.78  Mediana: 29.60
-Entropía promedio: 5.74  Mediana: 6.11
-Contraste promedio:47.37  Mediana: 47.08
-Uniformidad promedio:0.4529  Mediana: 0.4569
+=== RESUMEN ESTADÍSTICO ===
+Método       | AMBE (↓)        | PSNR (↑)       | Entropía       | Contraste     | Uniformidad   | Tiempo (ms)
+             | Media   Mediana | Media  Mediana | Media Mediana  | Media Mediana | Media Mediana | Media
+------------------------------------------------------------------------------------------------------------------------
+CLAHE       |  18.57   18.56 |  20.47   19.96 |  6.55   6.90 |  48.94   50.52 | 0.5296  0.5359 |    2.58
+HE          |  83.84   84.77 |   8.80    8.45 |  5.66   5.91 |  73.50   72.99 | 0.6204  0.6382 |    0.93
+DQHEPL      |   6.89    6.45 |  24.43   23.38 |  5.78   6.05 |  54.79   53.85 | 0.4383  0.4423 |    7.69
+BHEPL-D     |   4.79    3.97 |  29.78   29.60 |  5.74   6.11 |  47.37   47.08 | 0.4529  0.4569 |    1.95
+
+LEYENDA:
+- AMBE: Absolute Mean Brightness Error (menor es mejor)
+- PSNR: Peak Signal-to-Noise Ratio en dB (mayor es mejor)
+- Uniformidad: 1 = máxima uniformidad
+- Tiempos en milisegundos (menor es mejor)

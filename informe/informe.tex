@@ -10,11 +10,19 @@
 \usepackage{float}
 \usepackage{subcaption}
 
+% Bullet mas pequeno en listas
+\usepackage{enumitem} % Add to preamble
+\setlist[itemize]{label={\scalebox{0.9}{\textbullet}}}
+
 % Tablas
 \usepackage{array}    % Para ajustar columnas
+\usepackage{siunitx}  % Para alineación decimal
 \setlength{\intextsep}{1.5em}      % Elimina espacio arriba/abajo de floats
 \setlength{\textfloatsep}{1.5em}   % Elimina espacio entre floats y texto
 \captionsetup[table]{skip=2pt}   % Espacio mínimo entre tabla y caption
+
+% Imagenes
+\usepackage{graphicx}
 
 % removes footnote with conference information in first column
 \renewcommand\footnotetextcopyrightpermission[1]{}
@@ -67,24 +75,49 @@ Falta completar \rojo{Completar}
 \maketitle
 
 \section{Introducción}
+
+\subsection{Estructura}
+\label{subsec:estructura}
+
+Este documento se organiza en seis secciones principales. La
+\emph{\hyperref[sec:contexto]{Introducción}} establece el contexto y la motivación del
+estudio, definiendo los objetivos específicos de la comparación de algoritmos de mejora de
+contraste en imágenes. Seguidamente, la sección de
+\emph{\hyperref[sec:metodologia]{Metodología}} detalla los cuatro métodos evaluados, el
+procesamiento aplicado a las imágenes y las métricas utilizadas para su evaluación.
+
+En la sección de \emph{\hyperref[sec:resultados]{Resultados}} se presentan análisis tanto
+visuales como cuantitativos: se compara el desempeño de cada algoritmo mediante gráficos,
+tablas y ejemplos representativos, seguido de una discusión crítica que interpreta estos
+hallazgos. Las \emph{\hyperref[sec:conclusiones]{Conclusiones}} sintetizan los principales
+hallazgos y ofrecen recomendaciones para la selección de algoritmos según distintos escenarios.
+
+Finalmente, el documento incluye las \emph{\hyperref[sec:bibliography]{Referencias}} consultadas
+y, en los \emph{\hyperref[sec:apendices]{Apéndices}}, material complementario como tablas
+detalladas, códigos de implementación y resultados extendidos para facilitar la
+reproducibilidad del estudio.
+
 \subsection{Contexto y Motivación}
+\label{subsec:contexto}
 
-El procesamiento digital de imágenes juega un papel crucial en diversos campos tecnológicos, donde la mejora de contraste permite:
+El procesamiento digital de imágenes es esencial en campos como la medicina, la industria, la
+fotografía y la visión por computadora, donde el realce de contraste resulta crítico para
+tareas como la identificación de anomalías en radiografías, la inspección automatizada de
+piezas manufacturadas o el procesamiento de imágenes en entornos con iluminación limitada.
 
-\begin{itemize}
-	\item Visualizar detalles críticos en imágenes médicas
-	\item Automatizar inspecciones industriales
-	\item Mejorar imágenes en condiciones de baja iluminación
-\end{itemize}
-
-Este trabajo evalúa métodos clásicos de mejora de contraste, proporcionando métricas
-comparativas para aplicaciones que requieren bajo costo computacional y resultados
-interpretables.
+Este estudio compara métodos clásicos de realce de contraste, mas específicamente CLAHE (Contrast
+Limited Adaptive Histogram Equalization) y HE (Histogram Equalization); con técnicas avanzadas
+desarrolladas por Ooi y Mat Isa~\cite{paper}: DQHEPL y BHEPL-D. Estas últimas destacan por
+preservar el brillo medio de la imagen mientras maximizan el detalle visible, un equilibrio
+crucial para aplicaciones prácticas. La evaluación se basa en métricas cuantitativas (AMBE,
+PSNR, entropía, uniformidad, contraste y tiempo de procesamiento) complementadas con análisis
+visuales subjetivos.
 
 \subsection{Objetivo}
 \label{subsec:objetivo}
 
-Este informe tiene como objetivo principal evaluar cuantitativamente el desempeño de cuatro algoritmos de mejora de contraste en imágenes en escala de grises:
+Este informe tiene como objetivo principal evaluar cuantitativamente el desempeño de los cuatro
+algoritmos de mejora de contraste sobre imágenes en escala de grises:
 
 \begin{itemize}
 	\item \textbf{CLAHE} (Contrast Limited Adaptive Histogram Equalization)
@@ -101,80 +134,156 @@ La evaluación se realizará mediante métricas objetivas que consideran:
 	\item Conservación de texturas (Entropía)
 	\item Nivel de realce visual (Contraste)
 	\item Distribución de intensidades (Uniformidad)
+	\item Tiempo medio de ejecucion
 \end{itemize}
 
-El análisis comparativo permitirá identificar:
-\begin{enumerate}
-	\item El algoritmo más efectivo para imágenes con bajo contraste inicial
-	\item Compromisos entre realce visual y preservación de brillo
-	\item Sensibilidad a diferentes distribuciones histogramáticas
-\end{enumerate}
+El análisis comparativo permitirá identificar el algoritmo más efectivo y eficiente para
+imágenes con bajo contraste inicial, el compromisos entre realce visual y preservación de
+brillo y la sensibilidad a diferentes distribuciones histogramáticas
 
 Los resultados proporcionarán criterios técnicos para seleccionar el método óptimo según
 aplicaciones específicas en procesamiento digital de imágenes.
 
-\subsection{Estructura del Informe}
-\rojo{continuar}
-- Resumen de las secciones del informe.
-
 \section{Metodología}
+\label{sec:metodologia}
 \subsection{Descripción de los Algoritmos}
-\rojo{continuar}
-\subsubsection{CLAHE (Contrast Limited Adaptive Histogram Equalization)}
-- Explicación del algoritmo.
-- Detalles sobre los parámetros utilizados (clipLimit, tileGridSize).
+\label{subsec:algoritmos}
 
 \subsubsection{HE (Histogram Equalization)}
-- Explicación del algoritmo.
-- Comparativa con CLAHE.
+\label{sssec:he}
+La ecualización tradicional de histograma en OpenCV se implementa con
+\texttt{cv2.equalizeHist()}. Transforma la imagen mediante:
 
-\subsubsection{DQHEPL (Dynamic Quantization-based Histogram Equalization with Pulse-Level Enhancement)}
-- Explicación del algoritmo.
-- Características particulares.
+\begin{equation}
+	s_k = T(r_k) = (L-1)\sum_{j=0}^k \frac{n_j}{N}
+\end{equation}
 
-\subsubsection{BHEPL-D (Bilateral Histogram Equalization with Pulse-Level Enhancement and Denoising)}
-- Explicación del algoritmo.
-- Detalles sobre cómo mejora la técnica HE tradicional.
+\subsubsection{CLAHE (Contrast Limited Adaptive Histogram Equalization)}
+\label{sssec:clahe}
+CLAHE es un algoritmo avanzado de mejora de contraste implementado en OpenCV mediante la
+función \texttt{cv2.createCLAHE()}. Opera dividiendo la imagen en regiones locales (tiles) y
+aplicando ecualización limitada:
 
-\subsection{Preparación de las Imágenes}
-\rojo{continuar}
-- Detalles sobre el conjunto de datos utilizado.
-- Preprocesamiento de las imágenes (si aplica).
+\begin{equation}
+	H_{clip}(k) =
+	\begin{cases}
+		\text{clipLimit} & \text{si } H(k) > \text{clipLimit} \\
+		H(k)             & \text{en otro caso}
+	\end{cases}
+\end{equation}
+
+\textbf{Parámetros clave utilizados}:
+\begin{itemize}
+	\item \texttt{clipLimit}: Umbral de recorte (valor=2.0)
+	\item \texttt{tileGridSize}: Tamaño de ventana local (valor=8×8)
+\end{itemize}
+
+La transformación se aplica mediante:
+\begin{equation}
+	y_{ij} = \left\lfloor (L-1) \sum_{k=0}^{x_{ij}} p_{T_{mn}}(k) \right\rfloor
+\end{equation}
+donde $p_{T_{mn}}$ es el histograma normalizado del tile correspondiente.
+
+Este algoritmo se diferencia de CLAHE en que este opera localmente, no amplifica el ruido y
+no pierde detalles en regiones de alta homogeneidad.
+
+\subsubsection{DQHEPL (Dynamic Quantization-based HE with Pulse-Level Enhancement)}
+\label{sssec:dqhepl}
+Algoritmo avanzado que combina: \rojo{fix}
+
+\begin{equation}
+	Q_{dynamic}(x) = \left\lfloor \frac{x - \mu}{K\sigma} \right\rfloor \times \Delta
+\end{equation}
+
+\textbf{Características principales}:
+\begin{itemize}
+	\item Cuantización adaptativa basada en estadísticas locales
+	\item Función de transferencia no lineal:
+	      \begin{equation}
+		      f(x) = \alpha\tanh(\beta x) + \gamma x
+	      \end{equation}
+	\item Preservación de bordes mediante operadores diferenciales
+\end{itemize}
+
+\subsubsection{BHEPL-D (Bilateral HE with Pulse-Level Enhancement and Denoising)}
+\label{sssec:bhepl-d}
+Extensión de HE que incorpora filtrado bilateral:
+\rojo{fix}
+
+\begin{equation}
+	y_i = \frac{\sum_{j\in\Omega} w_s(||i-j||)w_r(|I_i-I_j|)I_j}{\sum_{j\in\Omega} w_s(||i-j||)w_r(|I_i-I_j|)}
+\end{equation}
+
+\textbf{Mejoras sobre HE tradicional}:
+\begin{itemize}
+	\item Función de mapeo bilateral:
+	      \begin{equation}
+		      \text{BHEPL}(x) = x + \lambda(x)(\text{HE}(x)-x)
+	      \end{equation}
+	\item Control adaptativo de ganancia $\lambda(x)$ basado en gradiente local
+	\item Supresión de artefactos mediante filtro gaussiano espacial
+\end{itemize}
+
+\subsection{Preparación de las imágenes}
+\label{subsec:preparacion}
+
+\subsubsection{Conjunto de datos de prueba}
+\rojo{fix datasets}
+Se utilizaron tres categorías de imágenes para la evaluación:
+
+\begin{itemize}
+	\item \textbf{Imágenes médicas}: 50 imágenes DICOM de resonancia magnética cerebral (512×512 px) del dataset IXI \cite{ixi_dataset}
+	\item \textbf{Fotografías subexpuestas}: 30 imágenes del MIT-Adobe FiveK Dataset \cite{fivek_dataset} con histograma concentrado (ISO > 1600)
+	\item \textbf{Imágenes de vigilancia}: 20 frames nocturnos del dataset KAIST Multispectral Pedestrian \cite{kaist_dataset}
+\end{itemize}
+
+\subsubsection{Pre-procesamiento}
+\rojo{fix}
+El pipeline de preparación implementado con OpenCV incluye primeramente la conversion a escala
+de grises:
+\begin{equation}
+	I_{gray} = 0.299R + 0.587G + 0.114B
+\end{equation}
 
 \subsection{Métricas de Evaluación}
 
+Todas estas metricas de evaluacion ya vienen implementadas en dentro de la libreria OpenCV. De igual manera
+en esta seccion se detalla brevemente el funcionamiento de estas metricas de analisis de imagenes.
+
 \subsubsection{AMBE (Average Mean Brightness Error)}
-La métrica AMBE mide la diferencia absoluta entre el brillo promedio de la imagen original y el de la imagen procesada. Su fórmula es:
+La métrica AMBE mide la diferencia absoluta entre el brillo promedio de la imagen original y el
+de la imagen procesada. Su fórmula es:
 
 \begin{equation}
-\text{AMBE} = \left| \mu_X - \mu_Y \right|
+	\text{AMBE} = \left| \mu_X - \mu_Y \right|
 \end{equation}
 
 donde:
 \begin{itemize}
-    \item $\mu_X$: Brillo promedio de la imagen original.
-    \item $\mu_Y$: Brillo promedio de la imagen procesada.
+	\item $\mu_X$: Brillo promedio de la imagen original.
+	\item $\mu_Y$: Brillo promedio de la imagen procesada.
 \end{itemize}
 
 Un valor de AMBE cercano a cero indica una buena preservación del brillo global de la imagen original.
 
 \subsubsection{PSNR (Peak Signal-to-Noise Ratio)}
-El PSNR mide la calidad de reconstrucción entre dos imágenes. Se basa en el error cuadrático medio (MSE) entre la imagen original y la imagen procesada:
+El PSNR mide la calidad de reconstrucción entre dos imágenes. Se basa en el error cuadrático
+medio (MSE) entre la imagen original y la imagen procesada:
 
 \begin{equation}
-\text{MSE} = \frac{1}{MN} \sum_{i=1}^{M} \sum_{j=1}^{N} \left[ X(i,j) - Y(i,j) \right]^2
+	\text{MSE} = \frac{1}{MN} \sum_{i=1}^{M} \sum_{j=1}^{N} \left[ X(i,j) - Y(i,j) \right]^2
 \end{equation}
 
 \begin{equation}
-\text{PSNR} = 10 \cdot \log_{10} \left( \frac{L^2}{\text{MSE}} \right)
+	\text{PSNR} = 10 \cdot \log_{10} \left( \frac{L^2}{\text{MSE}} \right)
 \end{equation}
 
 donde:
 \begin{itemize}
-    \item $X(i,j)$: Intensidad del píxel en la posición $(i,j)$ de la imagen original.
-    \item $Y(i,j)$: Intensidad del píxel correspondiente en la imagen procesada.
-    \item $M, N$: Dimensiones de la imagen.
-    \item $L$: Valor máximo posible de intensidad (por ejemplo, 255 para imágenes de 8 bits).
+	\item $X(i,j)$: Intensidad del píxel en la posición $(i,j)$ de la imagen original.
+	\item $Y(i,j)$: Intensidad del píxel correspondiente en la imagen procesada.
+	\item $M, N$: Dimensiones de la imagen.
+	\item $L$: Valor máximo posible de intensidad (por ejemplo, 255 para imágenes de 8 bits).
 \end{itemize}
 
 Un PSNR mayor indica mejor calidad de la imagen procesada.
@@ -183,51 +292,83 @@ Un PSNR mayor indica mejor calidad de la imagen procesada.
 La entropía mide la cantidad de información o imprevisibilidad en la distribución de niveles de gris de una imagen:
 
 \begin{equation}
-\text{Entropía} = - \sum_{k=0}^{L-1} p_k \cdot \log_2(p_k)
+	\text{Entropía} = - \sum_{k=0}^{L-1} p_k \cdot \log_2(p_k)
 \end{equation}
 
 donde:
 \begin{itemize}
-    \item $p_k$: Probabilidad de ocurrencia del nivel de gris $k$.
-    \item $L$: Número total de niveles de gris (por ejemplo, 256).
+	\item $p_k$: Probabilidad de ocurrencia del nivel de gris $k$.
+	\item $L$: Número total de niveles de gris (por ejemplo, 256).
 \end{itemize}
 
-Una mayor entropía implica una imagen más rica en detalles e información visual.
+Una mayor entropía implica una imagen más rica en detalles e información visual, por tanto
+puede exponer una posible mejora del contraste.
 
 \subsubsection{Contraste}
 Una forma común de medir el contraste es utilizando la desviación estándar de las intensidades:
 
 \begin{equation}
-\text{Contraste} = \sigma = \sqrt{\frac{1}{MN} \sum_{i=1}^{M} \sum_{j=1}^{N} \left[ I(i,j) - \mu \right]^2}
+	\text{Contraste} = \sigma = \sqrt{\frac{1}{MN} \sum_{i=1}^{M} \sum_{j=1}^{N} \left[ I(i,j) - \mu \right]^2}
 \end{equation}
 
 donde:
 \begin{itemize}
-    \item $I(i,j)$: Intensidad del píxel en la posición $(i,j)$.
-    \item $\mu$: Promedio de intensidades en la imagen.
+	\item $I(i,j)$: Intensidad del píxel en la posición $(i,j)$.
+	\item $\mu$: Promedio de intensidades en la imagen.
 \end{itemize}
 
-El contraste también puede definirse mediante medidas basadas en diferencias entre píxeles vecinos o métricas estructurales más avanzadas, pero la desviación estándar es una de las más utilizadas por su simplicidad y efectividad.
+El contraste también puede definirse mediante medidas basadas en diferencias entre píxeles
+vecinos o métricas estructurales más avanzadas, pero la desviación estándar es una de las más
+utilizadas por su simplicidad y efectividad.
 
+\subsubsection{Uniformidad}
+La uniformidad cuantifica qué tan homogénea es la distribución de intensidades en la imagen. Se
+calcula mediante el Coeficiente de Variación (CV) normalizado:
+
+\begin{equation}
+	\text{Uniformidad} = \frac{1}{1 + \left(\frac{\sigma}{\mu}\right)}
+\end{equation}
+
+donde:
+\begin{itemize}
+	\item $\sigma$: Desviación estándar de las intensidades (igual que en la métrica de contraste)
+	\item $\mu$: Valor medio de intensidad (con protección contra división por cero)
+\end{itemize}
+
+Esta métrica produce valores en el rango [0,1], donde:
+\begin{itemize}
+	\item 1 indica máxima uniformidad (distribución perfectamente homogénea)
+	\item 0 representa mínima uniformidad (distribución altamente heterogénea)
+\end{itemize}
+
+A diferencia del contraste que mide dispersión absoluta, la uniformidad evalúa la dispersión
+relativa al valor medio, siendo particularmente útil para comparar imágenes con diferentes
+niveles de brillo promedio.
+
+Cuando la uniformidad ($U \in [0,1]$) en imágenes toma valores altos
+($U > 0.7$) pueden indicar pérdida de detalle relevante, mientras que valores muy bajos ($U <
+	0.3$) podrían reflejar ruido introducido por el procesamiento (falsos positivos). Un rango
+intermedio ($0.4 \leq U \leq 0.7$) sugiere un equilibrio óptimo entre realce de estructuras y
+preservación de homogeneidad natural. Esta métrica requiere validación conjunta con análisis
+visual y otras métricas (PSNR, AMBE) para descartar artefactos.
 
 \section{Resultados}
-\subsection{Evaluación Visual}
-- Comparación visual de las imágenes originales y las mejoradas con cada algoritmo.
-- Uso de imágenes de ejemplo para ilustrar las diferencias.
+\label{sec:resultados}
 
-\newpage
-\subsection{Evaluación de Histogramas}
+\rojo{fix}
+En esta sección se presenta un análisis cualitativo mediante la comparación visual directa
+entre las imágenes originales y sus versiones procesadas con cada algoritmo. Se seleccionarán
+tres casos representativos que muestren distintos escenarios de desafío con imágenes subexpuestas,
+con baja dinámica de contraste y con presencia de ruido. Para cada caso, se incluirán:
+\rojo{arreglar}
 
-\subsubsection{Análisis imagen 2015\_00002}
+% --------- ANALISIS DE HISTOGRAMAS ----------
+\subsection{Evaluación Histogramatica, cualitativa y cuantitativa de imágenes seleccionadas}
 
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad
-nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia.
-Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim
-nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex
-occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate.
-Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua
-reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat
-ullamco ut ea consectetur et est culpa et culpa duis.
+\subsubsection{Análisis imagen 2015\_00002.png}
+
+La primera imagen seleccionada cuenta con una distribucion mas homogenea y con mayor exposicion
+\rojo{hablar}
 
 \begin{table}[H]
 	\centering
@@ -252,7 +393,7 @@ ullamco ut ea consectetur et est culpa et culpa duis.
 
 	\vspace{0.5em} % Reduce espacio inferior
 	\footnotesize%
-	\textit{Nota: AMBE (Absolute Mean Brightness Error), PSNR (Peak Signal-to-Noise Ratio).}
+	\textit{Nota: AMBE (menor es mejor), PSNR (mayor es mejor). Uniformidad: 0.6–0.85 optimo}
 \end{table}
 
 Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad
@@ -264,7 +405,7 @@ Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia e
 reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat
 ullamco ut ea consectetur et est culpa et culpa duis.
 
-\begin{figure}[H]
+\begin{figure}[htbp]
 	\centering
 
 	% Primera fila (2 histogramas)
@@ -280,9 +421,6 @@ ullamco ut ea consectetur et est culpa et culpa duis.
 		\label{fig:dqhepl_1}
 	\end{subfigure}
 
-	% Espacio entre filas
-	\vspace{5mm}
-
 	% Segunda fila (2 histogramas)
 	\begin{subfigure}[b]{0.45\textwidth}
 		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/he_histograma.pgf}}
@@ -297,7 +435,6 @@ ullamco ut ea consectetur et est culpa et culpa duis.
 	\end{subfigure}
 
 	% Tercera fila (1 histograma centrado)
-	\vspace{5mm}
 	\centering
 	\begin{subfigure}[b]{0.45\textwidth}
 		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00002/bhepl-d_histograma.pgf}}
@@ -309,18 +446,87 @@ ullamco ut ea consectetur et est culpa et culpa duis.
 	\label{fig:histogramas_1}
 \end{figure}
 
+Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.
+\rojo{hablar del histograma}
+
+\begin{figure}[htbp]
+	\centering
+
+	% Primera fila (2 imágenes)
+	\begin{subfigure}[b]{0.32\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./procesadas/2015_00002/2015_00002_original.png}
+		\caption{Imagen original}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.32\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./procesadas/2015_00002/2015_00002_he.png}
+		\caption{Histogram Equalization (HE)}
+	\end{subfigure}
+
+	% Segunda fila (2 imágenes)
+	\begin{subfigure}[b]{0.32\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./procesadas/2015_00002/2015_00002_clahe.png}
+		\caption{CLAHE}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.32\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./procesadas/2015_00002/2015_00002_dqhepl.png}
+		\caption{DQHEPL}
+	\end{subfigure}
+
+	% Tercera fila (1 imagen centrada)
+	\begin{subfigure}[b]{0.32\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./procesadas/2015_00002/2015_00002_bhepl_d.png}
+		\caption{BHEPL-D}
+	\end{subfigure}
+
+	\caption{Métodos aplicados sobre la imagen 2015\_00002.png}
+	\label{fig:visual_002}
+\end{figure}
+
+Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.
+\rojo{hablar del visual}
+
+% ------- imagen 0026 ---------------
 \subsubsection{Análisis de imagen 2015\_00026}
 
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad
-nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia.
-Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim
-nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex
-occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate.
-Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua
-reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat
-ullamco ut ea consectetur et est culpa et culpa duis.
+esta imagen cuenta con colores mas oscuros, una distribucion de brightness original mas baja y
+con zonas bastante mas brillantes que el resto de la imagen
 
-\begin{figure}[H]
+\begin{table}[H]
+	\centering
+	\caption{Métricas de calidad para la imagen 2015\_00026.jpg}
+	\label{tab:metricas_2015_00026}
+	\vspace{0.5em}
+
+	\resizebox{\linewidth}{!}{%
+		\begin{tabular}{@{}lrrrrr@{}}
+			\toprule
+			\textbf{Método} & \textbf{AMBE} & \textbf{PSNR (dB)} & \textbf{Entropía} & \textbf{Contraste} & \textbf{Uniformidad} \\
+			\midrule
+			CLAHE           & 20.90         & 19.96              & 6.23              & 30.94              & 0.552                \\
+			HE              & 102.75        & 6.44               & 5.28              & 78.59              & 0.604                \\
+			DQHEPL          & 13.70         & 17.13              & 5.16              & 48.83              & 0.388                \\
+			BHEPL-D         & 4.18          & 27.79              & 5.29              & 26.16              & 0.451                \\
+			\bottomrule
+		\end{tabular}%
+	}
+
+	\vspace{0.5em}
+	\footnotesize%
+	\textit{Nota: AMBE (menor es mejor), PSNR (mayor es mejor). Uniformidad: 0.6–0.85 optimo}
+\end{table}
+
+esta imagen cuenta con colores mas oscuros, una distribucion de brightness original mas baja y
+con zonas bastante mas brillantes que el resto de la imagen
+\rojo{hablar de las metricas}
+
+\begin{figure}[htbp]
 	\centering
 	\begin{subfigure}[b]{0.45\textwidth}
 		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/original_histograma.pgf}}
@@ -334,8 +540,6 @@ ullamco ut ea consectetur et est culpa et culpa duis.
 		\label{fig:dqhepl_2}
 	\end{subfigure}
 
-	\vspace{5mm}
-
 	\begin{subfigure}[b]{0.45\textwidth}
 		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/he_histograma.pgf}}
 		\caption{HE}
@@ -348,8 +552,6 @@ ullamco ut ea consectetur et est culpa et culpa duis.
 		\label{fig:clahe_2}
 	\end{subfigure}
 
-	\vspace{5mm}
-
 	\centering
 	\begin{subfigure}[b]{0.45\textwidth}
 		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00026/bhepl-d_histograma.pgf}}
@@ -361,11 +563,87 @@ ullamco ut ea consectetur et est culpa et culpa duis.
 	\label{fig:histogramas_2}
 \end{figure}
 
+esta imagen cuenta con colores mas oscuros, una distribucion de brightness original mas baja y
+con zonas bastante mas brillantes que el resto de la imagen
+\rojo{hablar de lo visual}
+
+\begin{figure}[htbp]
+	\centering
+
+	% Primera fila (2 imágenes)
+	\begin{subfigure}[b]{0.32\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./procesadas/2015_00026/2015_00026_original.png}
+		\caption{Imagen original}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.32\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./procesadas/2015_00026/2015_00026_he.png}
+		\caption{Histogram Equalization (HE)}
+	\end{subfigure}
+
+	% Segunda fila (2 imágenes)
+	\begin{subfigure}[b]{0.32\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./procesadas/2015_00026/2015_00026_clahe.png}
+		\caption{CLAHE}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.32\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./procesadas/2015_00026/2015_00026_dqhepl.png}
+		\caption{DQHEPL}
+	\end{subfigure}
+
+	% Tercera fila (1 imagen centrada)
+	\begin{subfigure}[b]{0.32\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./procesadas/2015_00026/2015_00026_bhepl_d.png}
+		\caption{BHEPL-D}
+	\end{subfigure}
+
+	\caption{Métodos aplicados sobre la imagen 2015\_00026.png}
+	\label{fig:visual_026}
+\end{figure}
+
+
+% ------- imagen 0027 ---------------
 \subsubsection{Análisis de imagen 2015\_00027}
 
-Texto de análisis para la tercera imagen...
+de nuevo, esta imagen cuenta con colores mas oscuros, una distribucion de brightness original mas baja y
+con zonas bastante mas brillantes que el resto de la imagen
+\rojo{hablar de la imagen}
 
-\begin{figure}[H]
+\begin{table}[H]
+	\centering
+	\caption{Métricas de calidad para la imagen 2015\_00027.jpg}
+	\label{tab:metricas_2015_00027}
+	\vspace{0.5em}
+
+	\resizebox{\linewidth}{!}{%
+		\begin{tabular}{@{}lrrrrr@{}}
+			\toprule
+			\textbf{Método} & \textbf{AMBE} & \textbf{PSNR (dB)} & \textbf{Entropía} & \textbf{Contraste} & \textbf{Uniformidad} \\
+			\midrule
+			CLAHE           & 23.79         & 18.09              & 7.35              & 72.30              & 0.509                \\
+			HE              & 67.94         & 10.23              & 6.43              & 77.13              & 0.607                \\
+			DQHEPL          & \textbf{3.31} & \textbf{32.79}     & 6.62              & 68.65              & 0.442                \\
+			BHEPL-D         & 4.40          & 32.43              & \textbf{6.68}     & \textbf{68.02}     & 0.449                \\
+			\bottomrule
+		\end{tabular}%
+	}
+
+	\vspace{0.5em}
+	\footnotesize%
+	\textit{Nota: AMBE (menor es mejor), PSNR (mayor es mejor). Uniformidad: 0.6–0.85 optimo}
+\end{table}
+
+de nuevo, esta imagen cuenta con colores mas oscuros, una distribucion de brightness original mas baja y
+con zonas bastante mas brillantes que el resto de la imagen
+\rojo{hablar del histograma}
+
+\begin{figure}[htbp]
 	\centering
 	\begin{subfigure}[b]{0.45\textwidth}
 		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/original_histograma.pgf}}
@@ -379,8 +657,6 @@ Texto de análisis para la tercera imagen...
 		\label{fig:dqhepl_3}
 	\end{subfigure}
 
-	\vspace{5mm}
-
 	\begin{subfigure}[b]{0.45\textwidth}
 		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/he_histograma.pgf}}
 		\caption{HE}
@@ -393,8 +669,6 @@ Texto de análisis para la tercera imagen...
 		\label{fig:clahe_3}
 	\end{subfigure}
 
-	\vspace{5mm}
-
 	\centering
 	\begin{subfigure}[b]{0.45\textwidth}
 		\resizebox{\linewidth}{!}{\input{./histogramas/2015_00027/bhepl-d_histograma.pgf}}
@@ -406,44 +680,171 @@ Texto de análisis para la tercera imagen...
 	\label{fig:histogramas_3}
 \end{figure}
 
-\subsection{Resultados Cuantitativos}
+Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.
+\rojo{hablar de lo visual}
+
+\begin{figure}[htbp]
+	\centering
+
+	% Primera fila (2 imágenes)
+	\begin{subfigure}[b]{0.28\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./procesadas/2015_00027/2015_00027_original.png}
+		\caption{Imagen original}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.28\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./procesadas/2015_00027/2015_00027_he.png}
+		\caption{Histogram Equalization (HE)}
+	\end{subfigure}
+
+	% Segunda fila (2 imágenes)
+	\begin{subfigure}[b]{0.28\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./procesadas/2015_00027/2015_00027_clahe.png}
+		\caption{CLAHE}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.28\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./procesadas/2015_00027/2015_00027_dqhepl.png}
+		\caption{DQHEPL}
+	\end{subfigure}
+
+	% Tercera fila (1 imagen centrada)
+	\begin{subfigure}[b]{0.28\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./procesadas/2015_00027/2015_00027_bhepl_d.png}
+		\caption{BHEPL-D}
+	\end{subfigure}
+
+	\caption{Métodos aplicados sobre la imagen 2015\_00027.png}
+	\label{fig:visual_027}
+\end{figure}
+
+\newpage
+
+% ---------  RESULTADOS globales --------------
+\subsection{Resultados Cuantitativos globales}
+\label{subsec:resultados_cuantitativos}
+\rojo{explicar}
+
+\begin{table}[htbp]
+	\centering
+	\caption{Comparación estadística de los algoritmos de mejora de contraste}
+	\label{tab:comparacion}
+	\small
+	\resizebox{\linewidth}{!}{%
+		\begin{tabular}{l
+				S[table-format=2.2] S[table-format=2.2]
+				S[table-format=2.2] S[table-format=2.2]
+				S[table-format=1.4] S[table-format=1.4]
+				S[table-format=2.2] S[table-format=2.2]}
+			\toprule
+			\textbf{Método}                       &
+			\multicolumn{2}{c}{\textbf{AMBE}}     &
+			\multicolumn{2}{c}{\textbf{PSNR}}     &
+			\multicolumn{2}{c}{\textbf{Entropía}} &
+			\multicolumn{2}{c}{\textbf{Contraste}}                                                                            \\
+			\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9}
+			                                      & {Prom.} & {Med.} & {Prom.} & {Med.} & {Prom.} & {Med.} & {Prom.} & {Med.} \\
+			\midrule
+			CLAHE                                 & 18.57   & 18.56  & 20.47   & 19.96  & 6.55    & 6.90   & 48.94   & 50.52  \\
+			HE                                    & 83.84   & 84.77  & 8.80    & 8.45   & 5.66    & 5.91   & 73.50   & 72.99  \\
+			DQHEPL                                & 6.89    & 6.45   & 24.43   & 23.38  & 5.78    & 6.05   & 54.79   & 53.85  \\
+			BHEPL-D                               & 4.79    & 3.97   & 29.78   & 29.60  & 5.74    & 6.11   & 47.37   & 47.08  \\
+			\bottomrule
+		\end{tabular}%
+	}
+
+	\vspace{0.5em}
+	\footnotesize%
+	\textit{Nota: AMBE (menor es mejor), PSNR (mayor es mejor). Uniformidad: 0.6–0.85 optimo}
+\end{table}
+
+Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad
+nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia.
+Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim
+nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex
+occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate.
+Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua
+reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat
+ullamco ut ea consectetur et est culpa et culpa duis.
+
+\begin{table}[htbp]
+	\caption{Comparación de tiempos de procesamiento}
+	\label{tab:comparacion_tiempos}
+	\small
+	\resizebox{0.5\linewidth}{!}{%
+		\begin{tabular}{lS[table-format=1]}
+			\toprule
+			\textbf{Método} & \textbf{Tiempo (ms)} \\
+			\midrule
+			CLAHE           & 2.58                 \\
+			HE              & 0.93                 \\
+			DQHEPL          & 7.69                 \\
+			BHEPL-D         & 1.95                 \\
+			\bottomrule
+		\end{tabular}%
+	}
+
+	\vspace{0.5em}
+	\footnotesize%
+	\textit{Tabla de comparacion de tiempos}
+\end{table}
+
 \subsubsection{Análisis de AMBE}
+\label{subsubsec:analisis_ambe}
 - Comparación de los valores promedio de AMBE para cada algoritmo.
 
 \subsubsection{Análisis de PSNR}
+\label{subsubsec:analisis_psnr}
 - Comparación de los valores promedio de PSNR para cada algoritmo.
 
 \subsubsection{Análisis de Entropía}
+\label{subsubsec:analisis_entropia}
 - Comparación de los valores promedio de entropía para cada algoritmo.
 
 \subsubsection{Análisis de Contraste}
+\label{subsubsec:analisis_contraste}
+- Comparación de los valores promedio de contraste para cada algoritmo.
+
+\subsubsection{Análisis de Uniformidad}
+\label{subsubsec:analisis_uniformidad}
 - Comparación de los valores promedio de contraste para cada algoritmo.
 
 \subsection{Discusión de los Resultados}
+\label{subsec:discusion}
+
 - Interpretación de los resultados obtenidos.
 - Comparación de los algoritmos en términos de sus métricas de evaluación.
 - Discusión sobre la efectividad de cada algoritmo.
 
-\section{Conclusiones}
 \subsection{Resumen de Hallazgos}
+\label{subsec:resumen}
 - Resumen de los principales resultados obtenidos de la comparación de los algoritmos.
 
+\section{Conclusiones}
+\label{sec:conclusiones}
+
 \subsection{Recomendaciones}
+\label{subsec:recomendaciones}
 - Recomendaciones sobre cuál algoritmo es el más efectivo en función de las métricas utilizadas.
 - Posibles mejoras o ajustes que se podrían hacer en los algoritmos.
 
-\subsection{Trabajo Futuro}
-- Sugerencias para futuras investigaciones y mejoras en los algoritmos de mejora de contraste.
+\section{Apéndices}
+\label{sec:apendices}
 
-\section{Referencias}
-- Lista de fuentes y trabajos relacionados con los algoritmos de mejora de contraste y procesamiento de imágenes.
-
-\section{Apéndices (si es necesario)}
-- Detalles adicionales que no se incluyeron en el cuerpo principal del informe, como códigos, tablas de resultados completos, gráficos adicionales, etc.
+\begin{itemize}
+	\item Dataset: \url{https://www.kaggle.com/datasets/takeenjazayeri/low-contrast-images}
+	\item Codigo fuente: \url{https://github.com/elias-gill/pdi_parcial1}
+\end{itemize}
 
 % Bibliografía
-\nocite{*} % Incluye TODAS las referencias del .bib sin citarlas
+\nocite{*} % Incluye TODAS las referencias del .bib sin necesidad de citarlas
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{bibliography}
+\label{sec:bibliography}
 
 \end{document}
