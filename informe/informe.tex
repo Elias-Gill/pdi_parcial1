@@ -331,22 +331,30 @@ exceso de recorte.
 \label{subsec:preparacion}
 
 \subsubsection{Conjunto de datos de prueba}
-\rojo{fix datasets}
-Se utilizaron tres categorías de imágenes para la evaluación:
 
-\begin{itemize}
-	\item \textbf{Imágenes médicas}: 50 imágenes DICOM de resonancia magnética cerebral (512×512 px) del dataset IXI \cite{ixi_dataset}
-	\item \textbf{Fotografías subexpuestas}: 30 imágenes del MIT-Adobe FiveK Dataset \cite{fivek_dataset} con histograma concentrado (ISO > 1600)
-	\item \textbf{Imágenes de vigilancia}: 20 frames nocturnos del dataset KAIST Multispectral Pedestrian \cite{kaist_dataset}
-\end{itemize}
+Para probar los métodos de mejora de contraste, se usó un conjunto de imágenes reales con bajo
+contraste, que está disponible públicamente en
+Kaggle\footnote{\url{https://www.kaggle.com/datasets/takeenjazayeri/low-contrast-images}}. El
+dataset incluye principalmente fotos a color, muchas de ellas con poca iluminación o
+directamente oscuras. También cuenta con escenarios con iluminación favorable, pero con poco
+rango dinámico o bruma luminosa, lo que genera histogramas estrechos y concentrados.
+
+Este conjunto sirve bien para ver cómo se comportan los algoritmos en situaciones reales, donde
+las condiciones de luz o de la cámara hacen que las imágenes salgan apagadas y con poco
+detalle.
 
 \subsubsection{Pre-procesamiento}
-\rojo{fix}
-El pipeline de preparación implementado con OpenCV incluye primeramente la conversion a escala
-de grises:
+
+El único paso de pre-procesamiento aplicado a las imágenes del dataset consiste en su
+conversión a escala de grises. Esta operación se realizó utilizando OpenCV, que implementa la
+fórmula estándar ponderada basada en la percepción humana del brillo:
+
 \begin{equation}
 	I_{gray} = 0.299R + 0.587G + 0.114B
 \end{equation}
+
+El resultado es una imagen monocromática que conserva la información de luminancia, facilitando
+el análisis posterior de técnicas de ecualización de histograma.
 
 \subsection{Métricas de Evaluación}
 
