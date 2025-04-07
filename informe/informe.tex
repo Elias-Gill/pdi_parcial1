@@ -62,11 +62,20 @@
 }
 
 \begin{abstract}
-Falta completar \rojo{Completar}
+Este trabajo presenta una evaluación de cuatro métodos de mejora de contraste en imágenes
+    digitales: CLAHE, HE, DQHEPL y BHEPL-D. Se analizaron métricas de calidad como AMBE, PSNR,
+    entropía, contraste y uniformidad, comparando su desempeño en diversas condiciones de
+    iluminación. Los resultados muestran que, aunque los métodos propuestos mejoran
+    significativamente la calidad visual, no son recomendables para aplicaciones de alta
+    precision debido a la sobresaturación de brillo y la distorsión en detalles clave. Sin
+    embargo, los métodos DQHEPL y BHEPL-D demuestran ser efectivos para ajustes fotográficos y
+    realce de imágenes digitales. Se sugieren mejoras en el tiempo de procesamiento y en el
+    control del brillo para futuras investigaciones.
 \end{abstract}
 
 \keywords{
-    Falta completar \rojo{Completar}
+Mejora de contraste, CLAHE, HE, DQHEPL, BHEPL-D, evaluación de imágenes, métricas de calidad,
+procesamiento de imágenes digitales, ajuste fotográfico.
 }
 
 \begin{document}
@@ -400,7 +409,7 @@ algoritmos de mejora.
 	\textit{Nota: AMBE (menor es mejor), PSNR (mayor es mejor). Uniformidad: 0.6–0.85 optimo}
 \end{table}
 
-La Tabla \ref{tab:metricas_2015_00002} muestra las métricas de calidad obtenidas para la imagen
+La \emph{Tabla \ref{tab:metricas_2015_00002}} muestra las métricas de calidad obtenidas para la imagen
 \emph{2015-00002.png}, la cual, como se mencionó previamente, no presenta condiciones particularmente
 desafiantes. Se puede observa que los métodos DQHEPL y BHEPL-D logran un buen
 equilibrio general: ambos presentan valores bajos de AMBE (6.20 y 8.38 respectivamente), lo que
@@ -457,7 +466,7 @@ distribución de brillo razonablemente homogénea tras el procesamiento.
 	\label{fig:histogramas_1}
 \end{figure}
 
-Al analizar la Figura \ref{fig:histogramas_1}, que muestra los histogramas generados por cada
+Al analizar la \emph{Figura \ref{fig:histogramas_1}}, que muestra los histogramas generados por cada
 uno de los métodos, se observa que las siluetas correspondientes a BHEPL-D y DQHEPL guardan una
 mayor similitud con la del histograma original. La distribución de niveles de gris en estos
 casos se mantiene más cercana a la imagen de entrada, lo que indica que el brillo global ha
@@ -507,10 +516,9 @@ imagen, pero también implica una mejora notable en el contraste percibido.
 	\label{fig:visual_002}
 \end{figure}
 
-Finalmente, desde un análisis visual y subjetivo de las imagenes de la Figura
-\ref{fig:visual_002}, se puede observar que tanto CLAHE como HE tienden a sobresaturar la
-imagen en términos de luminosidad, siendo esta característica especialmente pronunciada en el
-caso de HE.
+Finalmente, desde un análisis visual y subjetivo de las imagenes de la \emph{Figura \ref{fig:visual_002}},
+se puede observar que tanto CLAHE como HE tienden a sobresaturar la imagen en términos de
+luminosidad, siendo esta característica especialmente pronunciada en el caso de HE.
 
 En cuanto a los métodos propuestos por Ooi y Mat Isa, ambos ofrecen resultados visualmente muy
 similares y efectivos. Sin embargo, DQHEPL presenta una ligera ventaja en cuanto a claridad en
@@ -550,7 +558,7 @@ imagen, generando una distribución de brillo más heterogénea y compleja de tr
 	\textit{Nota: AMBE (menor es mejor), PSNR (mayor es mejor). Uniformidad: 0.6–0.85 optimo}
 \end{table}
 
-La Tabla \ref{tab:metricas_2015_00026} presenta los resultados obtenidos para la imagen
+La \emph{Tabla \ref{tab:metricas_2015_00026}} presenta los resultados obtenidos para la imagen
 \emph{2015-00026.jpg}, caracterizada por un bajo nivel de exposición general y la presencia de puntos
 aislados con alta luminosidad.
 
@@ -609,10 +617,10 @@ bajos en PSNR (17.13) y entropía (5.16), junto con una uniformidad significativ
 	\label{fig:histogramas_2}
 \end{figure}
 
-Al observar nuevamente las siluetas de los histogramas generados, presentadas en la Figura
-\ref{fig:histogramas_2}, se aprecia un patrón similar al del caso anterior. Los métodos BHEPL-D
-y DQHEPL conservan en gran medida la forma general del histograma original, lo que indica que
-logran preservar la distribución tonal de la imagen fuente.
+Al observar nuevamente las siluetas de los histogramas generados, presentadas en la
+\emph{Figura \ref{fig:histogramas_2}}, se aprecia un patrón similar al del caso anterior. Los
+métodos BHEPL-D y DQHEPL conservan en gran medida la forma general del histograma original, lo
+que indica que logran preservar la distribución tonal de la imagen fuente.
 
 En contraste, CLAHE y especialmente HE producen una transformación significativa en la forma
 del histograma, extendiendo la distribución de los niveles de gris de manera más amplia. Esta
@@ -663,7 +671,7 @@ una deformación moderada del histograma.
 	\label{fig:visual_026}
 \end{figure}
 
-Es en las comparaciones visuales presentadas en la Figura \ref{fig:visual_026} donde se
+Es en las comparaciones visuales presentadas en la \emph{Figura \ref{fig:visual_026}} donde se
 evidencian con mayor claridad las discrepancias entre los métodos, especialmente en relación
 con el caso anterior.
 
@@ -718,7 +726,7 @@ representativa de su rendimiento en situaciones más complejas
 	\textit{Nota: AMBE (menor es mejor), PSNR (mayor es mejor). Uniformidad: 0.6–0.85 optimo}
 \end{table}
 
-La Tabla \ref{tab:metricas_2015_00027} muestra los resultados obtenidos para la imagen
+La \emph{Tabla \ref{tab:metricas_2015_00027}} muestra los resultados obtenidos para la imagen
 \emph{2015-00027.jpg}, una imagen con una iluminación más compleja, que incluye tanto áreas con alta
 luminosidad como zonas más oscuras. Al comparar los diferentes métodos, se pueden identificar
 ciertos patrones en el rendimiento.
@@ -782,7 +790,7 @@ con una alteración pronunciada de los niveles de luminosidad.
 	\label{fig:histogramas_3}
 \end{figure}
 
-Al analizar los histogramas presentados en la Figura \ref{fig:histogramas_3}, se observa que
+Al analizar los histogramas presentados en la \emph{Figura \ref{fig:histogramas_3}}, se observa que
 tanto CLAHE, como BHEPL-D y DQHEPL mantienen la forma general del histograma original. Esto
 indica que estos métodos no alteran de manera drástica los niveles de brillo globales de la
 imagen, lo que sugiere una preservación en la distribución tonal original. La conservación de
@@ -835,7 +843,7 @@ pero a costa de una mayor pérdida de naturalidad y fidelidad en los tonos origi
 	\label{fig:visual_027}
 \end{figure}
 
-Finalmente, el análisis visual de la Figura \ref{fig:visual_027} revela que los métodos CLAHE,
+Finalmente, el análisis visual de la \emph{Figura \ref{fig:visual_027}} revela que los métodos CLAHE,
 BHEPL-D y DQHEPL muestran un rendimiento bastante similar en cuanto a la mejora visual de la
 imagen. Sin embargo, es importante destacar que los métodos propuestos por Ooi y Mat Isa
 sobresalen en la conservación de la naturalidad de la imagen original, logrando un equilibrio
@@ -860,7 +868,7 @@ resulta en una representación más fiel y visualmente atractiva.
 \subsection{Resultados Cuantitativos globales} \label{subsec:resultados_cuantitativos}
 
 En esta subsección se presentan los resultados cuantitativos obtenidos a partir de las métricas
-de calidad de las imágenes procesadas (Figura \ref{figure:global_estadisticas}), con un enfoque en la media y la mediana de los
+de calidad de las imágenes procesadas (\emph{Figura \ref{figure:global_estadisticas}}), con un enfoque en la media y la mediana de los
 desempeños de cada uno de los métodos evaluados.
 
 La media proporciona una visión general del rendimiento promedio de cada método, mientras que
@@ -969,7 +977,7 @@ debido a su enfoque en la preservación del brillo y el detalle.
 \subsubsection{Análisis de Tiempos de Procesamiento}
 \label{subsubsec:analisis_tiempos}
 
-En la Tabla \ref{tab:comparacion_tiempos} se presentan los tiempos de procesamiento de cada uno
+En la \emph{Tabla \ref{tab:comparacion_tiempos}} se presentan los tiempos de procesamiento de cada uno
 de los métodos evaluados. El tiempo de procesamiento es una métrica importante, ya que refleja
 la eficiencia de cada algoritmo en términos de velocidad de ejecución.
 
