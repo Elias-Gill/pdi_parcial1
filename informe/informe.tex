@@ -48,13 +48,13 @@
     \city{San Lorenzo}
     \country{Paraguay}
 }
-\author{Abigail Mercedes Nuñes Mendez}
+\author{Abigail Mercedes Núñez Fernández}
 \affiliation{
     \institution{Facultad Politecnica - UNA}
     \city{San Lorenzo}
     \country{Paraguay}
 }
-\author{Maria Jose Mendoza Recalde}
+\author{Maria José Mendoza Recalde}
 \affiliation{
     \institution{Facultad Politecnica - UNA}
     \city{San Lorenzo}
@@ -355,20 +355,24 @@ visual y otras métricas (PSNR, AMBE) para descartar artefactos.
 \section{Resultados}
 \label{sec:resultados}
 
-\rojo{fix}
-En esta sección se presenta un análisis cualitativo mediante la comparación visual directa
-entre las imágenes originales y sus versiones procesadas con cada algoritmo. Se seleccionarán
-tres casos representativos que muestren distintos escenarios de desafío con imágenes subexpuestas,
-con baja dinámica de contraste y con presencia de ruido. Para cada caso, se incluirán:
-\rojo{arreglar}
+En esta sección se realiza un análisis cualitativo y cuantitativo a través de comparaciones
+visuales y numéricas entre las imágenes originales y sus versiones procesadas por cada
+algoritmo.
+
+Primero, se seleccionan tres casos representativos que ilustran distintos escenarios de
+imágenes subexpuestas. Luego, se presentan los resultados estadísticos globales, utilizando
+tanto el promedio como la mediana de las métricas obtenidas.
 
 % --------- ANALISIS DE HISTOGRAMAS ----------
 \subsection{Evaluación Histogramatica, cualitativa y cuantitativa de imágenes seleccionadas}
 
 \subsubsection{Análisis imagen 2015\_00002.png}
 
-La primera imagen seleccionada cuenta con una distribucion mas homogenea y con mayor exposicion
-\rojo{hablar}
+El primer caso seleccionado corresponde a una imagen con condiciones de iluminación mas
+favorables. Se trata de una escena relativamente bien iluminada, con una distribución bastante
+homogénea del brillo y sin presencia de zonas extremadamente oscuras ni saturadas. En general,
+es una imagen normal, sin características que supongan un desafío particular para los
+algoritmos de mejora.
 
 \begin{table}[H]
 	\centering
@@ -396,14 +400,21 @@ La primera imagen seleccionada cuenta con una distribucion mas homogenea y con m
 	\textit{Nota: AMBE (menor es mejor), PSNR (mayor es mejor). Uniformidad: 0.6–0.85 optimo}
 \end{table}
 
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad
-nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia.
-Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim
-nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex
-occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate.
-Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua
-reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat
-ullamco ut ea consectetur et est culpa et culpa duis.
+La Tabla \ref{tab:metricas_2015_00002} muestra las métricas de calidad obtenidas para la imagen
+\emph{2015-00002.png}, la cual, como se mencionó previamente, no presenta condiciones particularmente
+desafiantes. Se puede observa que los métodos DQHEPL y BHEPL-D logran un buen
+equilibrio general: ambos presentan valores bajos de AMBE (6.20 y 8.38 respectivamente), lo que
+indica una menor alteración del brillo global con respecto a la imagen original, y niveles
+elevados de PSNR (24.14 y 23.82), reflejando una alta similitud con la imagen de entrada.
+
+Por su parte, CLAHE obtiene una entropía superior (7.91), lo cual sugiere una mayor diversidad
+tonal, aunque con una penalización en PSNR (14.27) y un AMBE más elevado (41.03). En cambio, HE
+presenta el mayor contraste (73.61), pero al costo de una distorsión considerable del brillo
+(AMBE de 58.78) y la menor PSNR de todos los métodos evaluados.
+
+En términos de uniformidad, todos los métodos se encuentran dentro del rango aceptable
+(0.6–0.85), con HE y CLAHE mostrando los valores más altos (0.635 y 0.629), lo cual indica una
+distribución de brillo razonablemente homogénea tras el procesamiento.
 
 \begin{figure}[htbp]
 	\centering
@@ -446,8 +457,15 @@ ullamco ut ea consectetur et est culpa et culpa duis.
 	\label{fig:histogramas_1}
 \end{figure}
 
-Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.
-\rojo{hablar del histograma}
+Al analizar la Figura \ref{fig:histogramas_1}, que muestra los histogramas generados por cada
+uno de los métodos, se observa que las siluetas correspondientes a BHEPL-D y DQHEPL guardan una
+mayor similitud con la del histograma original. La distribución de niveles de gris en estos
+casos se mantiene más cercana a la imagen de entrada, lo que indica que el brillo global ha
+sido preservado en buena medida.
+
+Por otro lado, los métodos CLAHE y especialmente HE exhiben una distribución más amplia de
+niveles de gris. Esto sugiere una modificación más significativa del brillo general de la
+imagen, pero también implica una mejora notable en el contraste percibido.
 
 \begin{figure}[htbp]
 	\centering
@@ -489,14 +507,24 @@ Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint 
 	\label{fig:visual_002}
 \end{figure}
 
-Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.
-\rojo{hablar del visual}
+Finalmente, desde un análisis visual y subjetivo de las imagenes de la Figura
+\ref{fig:visual_002}, se puede observar que tanto CLAHE como HE tienden a sobresaturar la
+imagen en términos de luminosidad, siendo esta característica especialmente pronunciada en el
+caso de HE.
+
+En cuanto a los métodos propuestos por Ooi y Mat Isa, ambos ofrecen resultados visualmente muy
+similares y efectivos. Sin embargo, DQHEPL presenta una ligera ventaja en cuanto a claridad en
+ciertas áreas de la imagen, permitiendo apreciar algunos detalles adicionales con mayor
+nitidez.
 
 % ------- imagen 0026 ---------------
 \subsubsection{Análisis de imagen 2015\_00026}
 
-esta imagen cuenta con colores mas oscuros, una distribucion de brightness original mas baja y
-con zonas bastante mas brillantes que el resto de la imagen
+La segunda imagen presenta un caso más particular, ya que posee un nivel de exposición
+considerablemente más bajo en comparación con la primera. La escena en general es notablemente
+más oscura, lo que representa un mayor desafío para los algoritmos de mejora. Además, se
+identifican zonas puntuales con alta luminosidad que contrastan fuertemente con el resto de la
+imagen, generando una distribución de brillo más heterogénea y compleja de tratar.
 
 \begin{table}[H]
 	\centering
@@ -522,9 +550,27 @@ con zonas bastante mas brillantes que el resto de la imagen
 	\textit{Nota: AMBE (menor es mejor), PSNR (mayor es mejor). Uniformidad: 0.6–0.85 optimo}
 \end{table}
 
-esta imagen cuenta con colores mas oscuros, una distribucion de brightness original mas baja y
-con zonas bastante mas brillantes que el resto de la imagen
-\rojo{hablar de las metricas}
+La Tabla \ref{tab:metricas_2015_00026} presenta los resultados obtenidos para la imagen
+\emph{2015-00026.jpg}, caracterizada por un bajo nivel de exposición general y la presencia de puntos
+aislados con alta luminosidad.
+
+En este contexto, BHEPL-D destaca por ofrecer el mejor equilibrio entre preservación del brillo
+(AMBE de 4.18) y fidelidad respecto a la imagen original (PSNR de 27.79 dB), lo que sugiere una
+mejora efectiva sin introducir distorsiones excesivas. Sin embargo, su contraste (26.16) y
+uniformidad (0.451) son relativamente bajos, lo que indica una mejora moderada en la
+diferenciación tonal y una distribución de brillo menos homogénea.
+
+CLAHE, por otro lado, muestra una mejora considerable en contraste (30.94) y mantiene un buen
+compromiso en AMBE (20.90) y PSNR (19.96), junto con una entropía notablemente superior (6.23),
+lo que sugiere una mejor diversidad de tonos en la imagen procesada.
+
+En cambio, HE presenta el mayor contraste (78.59) y una uniformidad razonable (0.604), pero con
+un AMBE extremadamente alto (102.75) y un PSNR muy bajo (6.44), lo que indica una fuerte
+alteración del brillo original y una aparente pérdida de fidelidad visual.
+
+DQHEPL, aunque mejora ligeramente en contraste respecto a BHEPL-D (48.83), muestra valores más
+bajos en PSNR (17.13) y entropía (5.16), junto con una uniformidad significativamente inferior
+(0.388), lo que sugiere una distribución tonal más irregular.
 
 \begin{figure}[htbp]
 	\centering
@@ -563,9 +609,19 @@ con zonas bastante mas brillantes que el resto de la imagen
 	\label{fig:histogramas_2}
 \end{figure}
 
-esta imagen cuenta con colores mas oscuros, una distribucion de brightness original mas baja y
-con zonas bastante mas brillantes que el resto de la imagen
-\rojo{hablar de lo visual}
+Al observar nuevamente las siluetas de los histogramas generados, presentadas en la Figura
+\ref{fig:histogramas_2}, se aprecia un patrón similar al del caso anterior. Los métodos BHEPL-D
+y DQHEPL conservan en gran medida la forma general del histograma original, lo que indica que
+logran preservar la distribución tonal de la imagen fuente.
+
+En contraste, CLAHE y especialmente HE producen una transformación significativa en la forma
+del histograma, extendiendo la distribución de los niveles de gris de manera más amplia. Esta
+expansión sugiere un incremento del contraste, pero también una alteración considerable del
+brillo original.
+
+Si se toma como referencia únicamente el histograma, CLAHE parece lograr un mejor equilibrio
+entre la mejora del contraste y la preservación de la estructura tonal original, manteniendo
+una deformación moderada del histograma.
 
 \begin{figure}[htbp]
 	\centering
@@ -607,13 +663,36 @@ con zonas bastante mas brillantes que el resto de la imagen
 	\label{fig:visual_026}
 \end{figure}
 
+Es en las comparaciones visuales presentadas en la Figura \ref{fig:visual_026} donde se
+evidencian con mayor claridad las discrepancias entre los métodos, especialmente en relación
+con el caso anterior.
+
+CLAHE se destaca como el enfoque que ofrece el resultado visual más equilibrado, logrando un
+aumento perceptible del contraste sin sacrificar en exceso el brillo original. La imagen
+procesada mantiene una buena legibilidad de los detalles en las zonas oscuras sin incurrir en
+sobresaturaciones notables, lo que refuerza su papel como una solución intermedia eficaz.
+
+HE, por su parte, consigue revelar una mayor cantidad de contenido oculto en las regiones
+subexpuestas, pero lo hace a costa de sobresaturar significativamente la imagen. Como es
+habitual en este método, el exceso de brillo general provoca una pérdida de naturalidad y
+uniformidad en la escena.
+
+En contraste, los métodos propuestos de DQHEPL y BHEPL-D presentan un desempeño claramente
+limitado en condiciones de baja iluminación. Al priorizar la preservación del nivel de brillo
+original, apenas logran mejorar la luminosidad global. Esta estrategia provoca que los detalles
+en las zonas oscuras permanezcan poco visibles, mientras que las regiones ya iluminadas tienden
+a acentuarse en exceso, generando un desequilibrio visual notorio.
 
 % ------- imagen 0027 ---------------
 \subsubsection{Análisis de imagen 2015\_00027}
 
-de nuevo, esta imagen cuenta con colores mas oscuros, una distribucion de brightness original mas baja y
-con zonas bastante mas brillantes que el resto de la imagen
-\rojo{hablar de la imagen}
+Finalizando con la selección de imágenes, nos encontramos con una imagen que presenta una
+iluminación más natural, con una distribución de brillo más equilibrada. La escena incluye
+áreas con alta luminosidad, así como zonas considerablemente oscuras.
+
+Este caso nos permitirá evaluar más a fondo cómo los métodos propuestos responden a imágenes
+con una variabilidad de iluminación más amplia, proporcionando una comparación más
+representativa de su rendimiento en situaciones más complejas
 
 \begin{table}[H]
 	\centering
@@ -639,9 +718,32 @@ con zonas bastante mas brillantes que el resto de la imagen
 	\textit{Nota: AMBE (menor es mejor), PSNR (mayor es mejor). Uniformidad: 0.6–0.85 optimo}
 \end{table}
 
-de nuevo, esta imagen cuenta con colores mas oscuros, una distribucion de brightness original mas baja y
-con zonas bastante mas brillantes que el resto de la imagen
-\rojo{hablar del histograma}
+La Tabla \ref{tab:metricas_2015_00027} muestra los resultados obtenidos para la imagen
+\emph{2015-00027.jpg}, una imagen con una iluminación más compleja, que incluye tanto áreas con alta
+luminosidad como zonas más oscuras. Al comparar los diferentes métodos, se pueden identificar
+ciertos patrones en el rendimiento.
+
+El método DQHEPL se destaca con el mejor desempeño en términos de AMBE (3.31) y PSNR (32.79
+dB), lo que indica que preserva de manera efectiva el brillo de la imagen original, mientras
+que mejora la fidelidad visual en comparación con otros métodos. Además, su entropía (6.62)
+sugiere una diversidad tonal razonable, aunque su uniformidad (0.442) es algo más baja, lo que
+podría indicar una ligera irregularidad en la distribución del brillo.
+
+Por su parte, BHEPL-D muestra un rendimiento similar, con una AMBE de 4.40 y PSNR de 32.43,
+lo que también denota una buena conservación del brillo y alta similitud con la imagen
+original. Su contraste (68.02) es el más alto de todos los métodos, lo que sugiere una mejora
+notable en la definición de los detalles, aunque la uniformidad sigue siendo algo baja (0.449).
+
+CLAHE, aunque con un AMBE (23.79) considerablemente más alto que los métodos anteriores,
+mantiene un buen nivel de PSNR (18.09 dB). Su contraste (72.30) se muestra bastante bueno, lo
+que mejora la percepción de los detalles, pero a costa de una mayor distorsión en los niveles
+de brillo. La uniformidad (0.509) también es algo más baja, lo que indica que la distribución
+de brillo no es completamente homogénea.
+
+Finalmente, HE presenta el peor desempeño en cuanto a conservación del brillo (AMBE de 67.94) y
+PSNR (10.23 dB), lo que refleja una pérdida significativa en la fidelidad visual. Sin embargo,
+logra un alto contraste (77.13), lo que permite que más detalles sean visibles, aunque también
+con una alteración pronunciada de los niveles de luminosidad.
 
 \begin{figure}[htbp]
 	\centering
@@ -680,8 +782,18 @@ con zonas bastante mas brillantes que el resto de la imagen
 	\label{fig:histogramas_3}
 \end{figure}
 
-Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint consectetur cupidatat.
-\rojo{hablar de lo visual}
+Al analizar los histogramas presentados en la Figura \ref{fig:histogramas_3}, se observa que
+tanto CLAHE, como BHEPL-D y DQHEPL mantienen la forma general del histograma original. Esto
+indica que estos métodos no alteran de manera drástica los niveles de brillo globales de la
+imagen, lo que sugiere una preservación en la distribución tonal original. La conservación de
+la forma del histograma también implica que las características visuales de la imagen, como el
+contraste y la luminosidad general, no se ven comprometidas significativamente.
+
+En cambio, como era de esperar, HE produce una distribución mucho más amplia de los niveles de
+gris, distorsionando considerablemente el histograma original. Esto significa que el método
+modifica el brillo de la imagen de manera más agresiva. Esta alteración del histograma refleja
+un cambio significativo en la percepción visual de la imagen, con una mejora en el contraste,
+pero a costa de una mayor pérdida de naturalidad y fidelidad en los tonos originales.
 
 \begin{figure}[htbp]
 	\centering
@@ -723,14 +835,44 @@ Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint 
 	\label{fig:visual_027}
 \end{figure}
 
+Finalmente, el análisis visual de la Figura \ref{fig:visual_027} revela que los métodos CLAHE,
+BHEPL-D y DQHEPL muestran un rendimiento bastante similar en cuanto a la mejora visual de la
+imagen. Sin embargo, es importante destacar que los métodos propuestos por Ooi y Mat Isa
+sobresalen en la conservación de la naturalidad de la imagen original, logrando un equilibrio
+efectivo entre la mejora del contraste y la preservación de la estructura tonal.
+
+En particular, estos métodos mantienen una apariencia más fiel a la imagen original, sin
+introducir distorsiones notables en los niveles de brillo o saturación. Al mismo tiempo, logran
+mejorar el contraste, lo que permite una mejor definición de los detalles en las áreas tanto
+oscuras como brillantes de la imagen. Este enfoque resulta en un acabado más fotográfico,
+proporcionando una sensación de realismo y profundidad visual que es más agradable para el ojo
+humano.
+
+Por otro lado, mientras que CLAHE también mejora el contraste, tiende a generar una saturación
+más pronunciada en ciertas áreas, lo que afecta la percepción general de la imagen, dándole un
+acabado algo más procesado. A diferencia de esto, los métodos BHEPL-D y DQHEPL no solo mejoran
+el contraste de manera más sutil, sino que conservan mejor la estructura original, lo que
+resulta en una representación más fiel y visualmente atractiva.
+
 \newpage
 
 % ---------  RESULTADOS globales --------------
-\subsection{Resultados Cuantitativos globales}
-\label{subsec:resultados_cuantitativos}
-\rojo{explicar}
+\subsection{Resultados Cuantitativos globales} \label{subsec:resultados_cuantitativos}
 
-\begin{table}[htbp]
+En esta subsección se presentan los resultados cuantitativos obtenidos a partir de las métricas
+de calidad de las imágenes procesadas (Figura \ref{figure:global_estadisticas}), con un enfoque en la media y la mediana de los
+desempeños de cada uno de los métodos evaluados.
+
+La media proporciona una visión general del rendimiento promedio de cada método, mientras que
+la mediana permite observar el comportamiento en el valor central de las distribuciones,
+evitando la influencia de valores extremos. De esta forma, se obtiene una imagen más completa y
+robusta del desempeño de cada enfoque.
+
+Este análisis final de los resultados cuantitativos permitirá concluir sobre las fortalezas y
+debilidades de los métodos evaluados, proporcionando una base sólida para su selección según el
+tipo de imagen y las necesidades de procesamiento.
+
+\begin{table}[H]
 	\centering
 	\caption{Comparación estadística de los algoritmos de mejora de contraste}
 	\label{tab:comparacion}
@@ -761,18 +903,77 @@ Lorem ipsum dolor sit amet, qui minim labore adipisicing minim sint cillum sint 
 	\vspace{0.5em}
 	\footnotesize%
 	\textit{Nota: AMBE (menor es mejor), PSNR (mayor es mejor). Uniformidad: 0.6–0.85 optimo}
+	\label{figure:global_estadisticas}
 \end{table}
 
-Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad
-nisi Lorem pariatur mollit ex esse exercitation amet. Nisi anim cupidatat excepteur officia.
-Reprehenderit nostrud nostrud ipsum Lorem est aliquip amet voluptate voluptate dolor minim
-nulla est proident. Nostrud officia pariatur ut officia. Sit irure elit esse ea nulla sunt ex
-occaecat reprehenderit commodo officia dolor Lorem duis laboris cupidatat officia voluptate.
-Culpa proident adipisicing id nulla nisi laboris ex in Lorem sunt duis officia eiusmod. Aliqua
-reprehenderit commodo ex non excepteur duis sunt velit enim. Voluptate laboris sint cupidatat
-ullamco ut ea consectetur et est culpa et culpa duis.
+\subsubsection{Análisis de AMBE}
+\label{subsubsec:analisis_ambe}
 
-\begin{table}[htbp]
+Al comparar los valores promedio de AMBE para los diferentes algoritmos, se observa que
+\textbf{BHEPL-D} obtiene el valor más bajo, con un promedio de 4.79, lo que indica una mínima
+discrepancia en el brillo respecto a la imagen original, lo cual es favorable. Por otro lado,
+\textbf{HE} presenta el valor más alto, con un promedio de 83.84, lo que sugiere una
+considerable alteración del brillo original, resultando en una mayor sobresaturación. Los
+métodos \textbf{CLAHE} y \textbf{DQHEPL} se encuentran en valores intermedios, con promedios de
+18.57 y 6.89, respectivamente. Esto refleja un compromiso entre la mejora del contraste y la
+preservación del brillo, siendo \textbf{DQHEPL} el segundo mejor en cuanto a conservación del
+brillo.
+
+\subsubsection{Análisis de PSNR}
+\label{subsubsec:analisis_psnr}
+
+En cuanto al PSNR, el valor promedio más alto se encuentra en \textbf{BHEPL-D} (29.78), lo que
+sugiere una mayor calidad de la imagen procesada, con un menor nivel de ruido y distorsión en
+comparación con los otros métodos. \textbf{DQHEPL} también presenta un buen desempeño con un
+promedio de 24.43, indicando que mantiene una buena relación señal/ruido, aunque no al nivel de
+\textbf{BHEPL-D}. En contraste, \textbf{HE} tiene el valor más bajo con un promedio de 8.80, lo
+que indica una pérdida significativa de calidad de la imagen debido a la sobresaturación.
+\textbf{CLAHE} se encuentra en un término medio con un promedio de 20.47, lo que refleja una
+calidad de imagen moderada.
+
+\subsubsection{Análisis de Entropía}
+\label{subsubsec:analisis_entropia}
+
+Al observar los valores de entropía, \textbf{CLAHE} tiene el valor promedio más alto (6.55), lo
+que indica una mayor cantidad de información o detalles presentes en la imagen procesada.
+\textbf{DQHEPL} y \textbf{BHEPL-D} muestran valores similares, con promedios de 5.78 y 5.74,
+respectivamente, lo que refleja un nivel razonable de detalle preservado sin sobresaturar la
+imagen. \textbf{HE}, por otro lado, presenta el valor más bajo con un promedio de 5.66, lo que
+sugiere que la sobresaturación podría estar reduciendo la cantidad de detalles perceptibles en
+la imagen procesada.
+
+\subsubsection{Análisis de Contraste}
+\label{subsubsec:analisis_contraste}
+
+En cuanto al contraste, \textbf{HE} presenta el valor promedio más alto (73.50), lo que indica
+una mejora significativa del contraste, pero a costa de alterar otros aspectos de la imagen,
+como la saturación de brillo. \textbf{DQHEPL} y \textbf{CLAHE} tienen promedios intermedios,
+con 54.79 y 48.94 respectivamente, lo que indica que ambos métodos mejoran el contraste de
+manera equilibrada sin introducir cambios excesivos en la imagen. \textbf{BHEPL-D}, aunque con
+un valor moderado (47.37), sigue siendo efectivo para mejorar el contraste sin comprometer la
+calidad visual de manera drástica.
+
+\subsubsection{Análisis de Uniformidad}
+\label{subsubsec:analisis_uniformidad}
+
+En el análisis de uniformidad, \textbf{HE} obtiene el mejor valor promedio (0.607), lo que
+indica una distribución más homogénea de los valores de gris, aunque esto también podría
+contribuir a la sobresaturación mencionada en otros análisis. \textbf{CLAHE}, con un valor de
+0.509, muestra una ligera disminución en la uniformidad de la imagen en comparación con
+\textbf{HE}, pero sigue ofreciendo un balance razonable entre contraste y preservación del
+brillo. \textbf{BHEPL-D} y \textbf{DQHEPL} presentan los valores más bajos, 0.449 y 0.442
+respectivamente, lo que podría sugerir que en estos métodos, aunque la imagen mantiene una
+mayor naturalidad, la uniformidad de los niveles de gris no es tan pronunciada, posiblemente
+debido a su enfoque en la preservación del brillo y el detalle.
+
+\subsubsection{Análisis de Tiempos de Procesamiento}
+\label{subsubsec:analisis_tiempos}
+
+En la Tabla \ref{tab:comparacion_tiempos} se presentan los tiempos de procesamiento de cada uno
+de los métodos evaluados. El tiempo de procesamiento es una métrica importante, ya que refleja
+la eficiencia de cada algoritmo en términos de velocidad de ejecución.
+
+\begin{table}[H]
 	\caption{Comparación de tiempos de procesamiento}
 	\label{tab:comparacion_tiempos}
 	\small
@@ -794,44 +995,136 @@ ullamco ut ea consectetur et est culpa et culpa duis.
 	\textit{Tabla de comparacion de tiempos}
 \end{table}
 
-\subsubsection{Análisis de AMBE}
-\label{subsubsec:analisis_ambe}
-- Comparación de los valores promedio de AMBE para cada algoritmo.
+Como se puede observar, el método \textbf{HE} es el más rápido, con un tiempo de procesamiento
+de solo 0.93 ms, seguido de cerca por \textbf{BHEPL-D}, con un tiempo de 1.95 ms.
+\textbf{CLAHE} también es eficiente, con un tiempo de 2.58 ms. En contraste, \textbf{DQHEPL}
+presenta el tiempo más alto, con 7.69 ms, lo que sugiere una mayor carga computacional en
+comparación con los otros métodos. Es importante señalar que este rendimiento inferior podría
+estar relacionado con nuestra implementación específica del algoritmo, pero, en general,
+\textbf{DQHEPL} se desempeñó significativamente peor en términos de tiempo de procesamiento.
 
-\subsubsection{Análisis de PSNR}
-\label{subsubsec:analisis_psnr}
-- Comparación de los valores promedio de PSNR para cada algoritmo.
 
-\subsubsection{Análisis de Entropía}
-\label{subsubsec:analisis_entropia}
-- Comparación de los valores promedio de entropía para cada algoritmo.
+\subsection{Discusión de los Resultados} \label{subsec:discusion}
 
-\subsubsection{Análisis de Contraste}
-\label{subsubsec:analisis_contraste}
-- Comparación de los valores promedio de contraste para cada algoritmo.
+En esta sección, se interpretan los resultados obtenidos de la evaluación de los métodos
+propuestos, destacando las diferencias entre ellos en cuanto a las métricas de calidad y
+tiempos de procesamiento.
 
-\subsubsection{Análisis de Uniformidad}
-\label{subsubsec:analisis_uniformidad}
-- Comparación de los valores promedio de contraste para cada algoritmo.
+\subsubsection{Interpretación de los Resultados Obtenidos}
 
-\subsection{Discusión de los Resultados}
-\label{subsec:discusion}
+Los resultados cuantitativos y visuales mostraron diferencias claras entre los métodos
+evaluados. En términos de las métricas AMBE, \textbf{BHEPL-D} y \textbf{DQHEPL} presentaron los
+mejores resultados, con valores más bajos, lo que indica una mejor preservación del brillo y
+menor deformación de la imagen. Por otro lado, \textbf{HE} presentó un valor muy alto en AMBE,
+lo que sugiere una sobresaturación de la imagen, afectando negativamente la calidad visual. En
+cuanto a PSNR, \textbf{DQHEPL} y \textbf{BHEPL-D} mostraron un rendimiento superior, lo que
+indica que estos métodos fueron capaces de mantener una mayor calidad de la imagen sin
+introducir demasiado ruido.
 
-- Interpretación de los resultados obtenidos.
-- Comparación de los algoritmos en términos de sus métricas de evaluación.
-- Discusión sobre la efectividad de cada algoritmo.
+En lo que respecta a la entropía, los valores fueron relativamente consistentes entre los
+métodos, sin grandes diferencias. Sin embargo, la variabilidad en el contraste mostró que
+\textbf{HE} obtuvo los valores más altos, indicando una mejora significativa en el contraste de
+la imagen, aunque con el costo de perder información en las zonas de baja luminosidad.
 
-\subsection{Resumen de Hallazgos}
-\label{subsec:resumen}
-- Resumen de los principales resultados obtenidos de la comparación de los algoritmos.
+\subsubsection{Comparación de los Algoritmos en Términos de sus Métricas de Evaluación}
+
+\textbf{CLAHE} fue el método que más equilibró las métricas de calidad visual, ofreciendo un
+buen rendimiento en AMBE, PSNR y contraste, aunque no llegó a los extremos alcanzados por
+\textbf{HE} en cuanto a contraste. Sin embargo, \textbf{CLAHE} logró mantener un buen nivel de
+uniformidad, lo que permitió conservar la naturalidad de la imagen.
+
+\textbf{HE}, aunque mejoró notablemente el contraste, presentó un efecto negativo en el brillo,
+mostrando valores altos de AMBE. Esto es típico de algoritmos que distribuyen más los niveles
+de gris, pero que terminan sobresaturando las zonas brillantes de la imagen. Aunque puede ser
+útil en ciertos contextos donde se busca enfatizar el contraste, en este análisis resultó menos
+favorable debido a la pérdida de detalles en zonas con iluminación baja.
+
+Por su parte, \textbf{DQHEPL} y \textbf{BHEPL-D} mostraron un rendimiento similar, conservando
+una buena estructura de la imagen y mejorando el contraste sin perder la uniformidad de los
+niveles de gris. Ambos métodos fueron los más efectivos en términos de preservar la naturalidad
+de la imagen, pero el rendimiento de \textbf{DQHEPL} en cuanto a tiempo de procesamiento fue
+considerablemente peor, lo que lo hace menos viable en aplicaciones donde la velocidad es
+crucial.
+
+\subsubsection{Discusión sobre la Efectividad de Cada Algoritmo}
+
+En términos de efectividad, los métodos \textbf{DQHEPL} y \textbf{BHEPL-D} sobresalieron por su
+capacidad para manejar diferentes condiciones de iluminación, manteniendo el brillo de la
+imagen y mejorando el contraste de manera efectiva. Sin embargo, el tiempo de procesamiento de
+\textbf{DQHEPL} fue un inconveniente significativo, lo que puede afectar su aplicabilidad en
+escenarios donde se requiera rapidez.
+
+El algoritmo \textbf{CLAHE} se desempeñó de manera consistente, logrando un buen equilibrio
+entre contraste y preservación del brillo. Aunque no es el más fuerte en cuanto a la mejora de
+contraste, su capacidad para manejar bien las diferencias de luminosidad sin introducir
+artefactos visuales lo convierte en una opción útil.
+
+En resumen, mientras que \textbf{HE} sobresale en cuanto a aumento de contraste, su efecto
+negativo sobre el brillo lo hace menos adecuado para aplicaciones que requieran una imagen
+equilibrada y natural. Por el contrario, \textbf{DQHEPL} y \textbf{BHEPL-D} se presentaron como
+los métodos más efectivos en términos de calidad visual, aunque la eficiencia computacional de
+\textbf{DQHEPL} debería considerarse en entornos de procesamiento rápido.
 
 \section{Conclusiones}
 \label{sec:conclusiones}
 
+En este trabajo se evaluaron diversos métodos de mejora de contraste en imágenes, con el
+objetivo de analizar su desempeño bajo diferentes condiciones de iluminación y características
+visuales. Los resultados obtenidos mediante las métricas de calidad, así como las observaciones
+visuales, han permitido identificar los puntos fuertes y las limitaciones de cada algoritmo.
+
+De acuerdo con los análisis, \textbf{BHEPL-D} y \textbf{DQHEPL} se destacaron por su capacidad
+para preservar la estructura de la imagen original mientras mejoraban el contraste y mantenían
+los niveles de brillo en un rango adecuado. Estos métodos demostraron ser los más efectivos en
+cuanto a la calidad visual, aunque el rendimiento de \textbf{DQHEPL} en términos de tiempo de
+procesamiento debe considerarse un factor limitante para su aplicación en contextos de
+procesamiento rápido.
+
+\textbf{CLAHE}, aunque no alcanzó el mismo nivel de mejora en el contraste que \textbf{HE},
+ofreció un buen balance entre la preservación de la naturalidad de la imagen y la mejora del
+contraste. Este método resultó ser una opción equilibrada para imágenes con variaciones
+moderadas en los niveles de luminosidad.
+
+Por otro lado, \textbf{HE} mostró un rendimiento sobresaliente en la mejora del contraste, pero
+a costa de sobresaturar las zonas brillantes, lo que afectó negativamente la calidad visual en
+términos de brillo y uniformidad.
+
+En términos generales, los métodos \textbf{BHEPL-D} y \textbf{DQHEPL} fueron los más adecuados
+para mantener un buen equilibrio entre la mejora del contraste y la preservación de la
+naturalidad de la imagen, lo que los convierte en opciones preferibles en aplicaciones que
+buscan mantener la calidad visual de las imágenes procesadas.
+
+El análisis de tiempos de procesamiento también reveló diferencias significativas, con
+\textbf{DQHEPL} siendo considerablemente más lento que los otros métodos, lo que puede ser una
+limitación importante para su uso en aplicaciones en tiempo real o con grandes volúmenes de
+imágenes.
+
+En conclusión, los métodos evaluados ofrecen un rango de soluciones que varían en términos de
+rendimiento y calidad visual, lo que permite seleccionar el más adecuado dependiendo de los
+requisitos específicos de cada aplicación, ya sea en términos de calidad visual o eficiencia
+computacional.
+
 \subsection{Recomendaciones}
 \label{subsec:recomendaciones}
-- Recomendaciones sobre cuál algoritmo es el más efectivo en función de las métricas utilizadas.
-- Posibles mejoras o ajustes que se podrían hacer en los algoritmos.
+
+En base a los resultados obtenidos, la recomendación general es que, aunque los métodos
+evaluados son efectivos para mejorar el contraste y la calidad visual de las imágenes, no son
+lo suficientemente confiables para aplicaciones donde se requiere una precisión extrema
+en entornos de baja exposicion.
+
+Sin embargo, los métodos \textbf{BHEPL-D} y \textbf{DQHEPL} resultan ser altamente efectivos
+para aplicaciones de mejora y realce de imágenes digitales, como ajustes fotográficos o en la
+mejora del contraste de fotografías en entornos de iluminación no controlados. Estos métodos
+ofrecen un balance adecuado entre la mejora visual y la preservación de la estructura original
+de la imagen, lo que los hace muy útiles en la edición fotográfica y la mejora de imágenes de
+contenido digital.
+
+Para futuras mejoras, se podría investigar la optimización de estos algoritmos en términos de
+tiempos de procesamiento, especialmente en el caso de \textbf{DQHEPL}, que mostró un
+rendimiento significativamente más lento en comparación con los otros métodos. Además, una
+posible mejora sería desarrollar técnicas que eviten la sobresaturación de ciertas zonas
+brillantes de la imagen, como ocurre con el algoritmo \textbf{HE}, mejorando la uniformidad y
+el control del brillo.
 
 \section{Apéndices}
 \label{sec:apendices}
