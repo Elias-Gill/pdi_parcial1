@@ -197,6 +197,11 @@ def main():
                 try:
                     img = medidas.read_image_as_grayscale(file_path)
 
+                    # Calcular métricas de la imagen original
+                    orig_entropy = medidas.calculate_entropy(img)
+                    orig_contrast = medidas.calculate_contrast(img)
+                    orig_uniformity = medidas.calculate_uniformity(img)
+
                     # Medir tiempos de procesamiento
                     tiempos = {}
                     start = time.perf_counter()
@@ -222,6 +227,13 @@ def main():
                     with open(stats_path, "w") as stats_file:
                         stats_file.write(f"Estadísticas para: {filename}\n")
                         stats_file.write("=" * 50 + "\n\n")
+                        
+                        # Escribir métricas de la imagen original
+                        stats_file.write("Imagen Original:\n")
+                        stats_file.write(f"Entropía: {orig_entropy:.4f}\n")
+                        stats_file.write(f"Contraste: {orig_contrast:.4f}\n")
+                        stats_file.write(f"Uniformidad: {orig_uniformity:.4f}\n")
+                        stats_file.write("-" * 40 + "\n\n")
 
                         for name, processed in zip(
                             ["CLAHE", "HE", "DQHEPL", "BHEPL-D"],
@@ -235,7 +247,7 @@ def main():
                             uniformity = medidas.calculate_uniformity(processed)
                             tiempo = tiempos[name]
 
-                            # Almacenar métricas
+                            # Almacenar métricas (solo para estadísticas globales)
                             metricas[name]["ambe"].append(ambe)
                             metricas[name]["psnr"].append(psnr)
                             metricas[name]["entropy"].append(entropy)
@@ -256,6 +268,17 @@ def main():
                 except Exception as e:
                     print(f"Error procesando {filename}: {str(e)}")
                     continue
+
+            # Mostrar resumen estadístico
+            print("\n" + "=" * 50)
+            print("RESUMEN ESTADÍSTICO DE TODAS LAS IMÁGENES")
+            print("=" * 50 + "\n")
+
+            # Encabezados de la tabla
+            print(
+                f"{'Método':<10} {'AMBE (↓)':<10} {'PSNR (↑)':<10} {'Entropía':<10} {'Contraste':<10} {'Uniformidad':<12} {'Tiempo (ms)':<10}"
+            )
+            print("-" * 80)
 
             for metodo in metricas:
                 if not metricas[metodo]["ambe"]:
@@ -278,7 +301,7 @@ def main():
                     * 1000,  # Convertir a ms
                 }
 
-            # RESULTADOS FINALES MEJORADOS (esto es lo nuevo que necesitas)
+            # RESULTADOS FINALES MEJORADOS
             print("\n\n=== RESUMEN ESTADÍSTICO ===")
             print("Método       | AMBE (↓)        | PSNR (↑)       | Entropía       | Contraste     | Uniformidad   | Tiempo (ms)")
             print("             | Media   Mediana | Media  Mediana | Media Mediana  | Media Mediana | Media Mediana | Media")
