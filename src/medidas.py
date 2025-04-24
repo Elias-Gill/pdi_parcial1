@@ -1,6 +1,6 @@
 import cv2
 import numpy as np
-from scipy.stats import entropy
+from skimage.measure import shannon_entropy
 
 
 def read_image_as_grayscale(path):
@@ -19,10 +19,7 @@ def calculate_psnr(original, processed):
 
 
 def calculate_entropy(image):
-    """Calcula la entropía de la imagen (medida de información)."""
-    hist = cv2.calcHist([image], [0], None, [256], [0, 256])
-    hist = hist.ravel() / hist.sum()  # Convertir a probabilidades 1D
-    return entropy(hist, base=2)
+    return shannon_entropy(image)
 
 
 def calculate_uniformity(image):
